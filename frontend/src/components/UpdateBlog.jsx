@@ -40,7 +40,7 @@ const UpdateBlog = ({ id, setShowUpdateBlog }) => {
       console.log(data);
     } catch (error) {
       console.error("Error updating blog:", error);
-      alert("Failed to update blog.");
+      toast.error("Failed to update blog.");
     }
   }
 
