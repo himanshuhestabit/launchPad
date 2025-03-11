@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const UpdateBlog = ({ id, setShowUpdateBlog }) => {
+  const API_URL = process.env.REACT_APP_API_URL;
   const [isUpdated, setIsUpdated] = useState(false);
   const {
     register,
@@ -28,7 +29,7 @@ const UpdateBlog = ({ id, setShowUpdateBlog }) => {
   async function onSubmit(data) {
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/v1/blogs/updateBlog/${id}`,
+        `${API_URL}/api/v1/blogs/updateBlog/${id}`,
         data,
         { withCredentials: true }
       );
