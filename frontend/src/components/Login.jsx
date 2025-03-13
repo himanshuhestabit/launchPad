@@ -23,15 +23,13 @@ const Login = () => {
       const response = await axios.post(`${API_URL}/api/v1/user/login`, data, {
         withCredentials: true,
       });
-
-      console.log("API Response:", response.data);
       if (response.status === 200) {
-        dispatch(loginSuccess());
+        const { role } = response.data.userExist;
+        dispatch(loginSuccess({ role }));
         toast.success("User logged in successfully!");
         navigate("/blog");
       }
     } catch (error) {
-      console.error("Login Error:", error);
       toast.error("Failed to login user");
     }
   }

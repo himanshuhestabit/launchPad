@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 const Register = () => {
+  const imageUrl =
+    "https://img.freepik.com/free-vector/mobile-login-concept-illustration_114360-83.jpg?t=st=1741858072~exp=1741861672~hmac=55fa744dd2302e6816a8128fa88d8e07af1f648d79d62e8d0e53b0c4b79188ae&w=740";
   const API_URL = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const {
@@ -78,8 +80,8 @@ const Register = () => {
           <div className="text-center flex flex-col items-center justify-center">
             <img
               className="bg-transparent bg-cover w-[85%] h-auto pb-3 "
-              src="https://img.freepik.com/free-vector/mobile-login-concept-illustration_114360-83.jpg?t=st=1741858072~exp=1741861672~hmac=55fa744dd2302e6816a8128fa88d8e07af1f648d79d62e8d0e53b0c4b79188ae&w=740"
-              alt="login Image"
+              src={imageUrl}
+              alt="Register Image"
             />
             <Link
               to="/login"
