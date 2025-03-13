@@ -4,19 +4,23 @@ import useGetBlogDetails from "../hooks/useGetBlogDetails";
 
 const ReadBlog = () => {
   const location = useLocation();
-  //   console.log(location.state);
   const id = location.state.id;
-  //   console.log(id);
   const { blogDetails } = useGetBlogDetails({ id });
-  //   console.log(blogDetails);
 
   return (
-    <div className="w-full h-screen flex  gap-4 bg-[#1A1A1D] text-white">
-      <div className="w-full container mx-auto pt-5">
-        <p className="font-bold text-3xl">{blogDetails?.title}</p>
-        <p className="font-medium text-lg">{blogDetails?.content}</p>
+    <div className="min-h-screen w-full bg-[#1A1A1D] text-white flex items-center justify-center px-6 py-12">
+      <div className="container max-w-4xl mx-auto bg-[#2A2A2E] p-10 rounded-lg shadow-lg">
+        <h1 className="text-4xl font-extrabold text-center text-[#F8B400] mb-6">
+          {blogDetails?.title}
+        </h1>
 
-        <p className="font-light">{blogDetails?.author}</p>
+        <p className="text-lg leading-8 text-gray-300 text-justify">
+          {blogDetails?.content}
+        </p>
+
+        <p className="mt-8 text-right text-gray-400 italic text-lg">
+          - {blogDetails?.author}
+        </p>
       </div>
     </div>
   );
