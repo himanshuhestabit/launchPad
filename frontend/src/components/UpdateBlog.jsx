@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useGetBlogDetails from "../hooks/useGetBlogDetails";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -35,9 +35,8 @@ const UpdateBlog = ({ id, setShowUpdateBlog }) => {
       );
       console.log("Updated successfully:", response.data);
       toast.success("Blog updated successfully!");
-      setShowUpdateBlog((prev) => !prev);
-      setIsUpdated((prev) => !prev);
-      console.log(data);
+      setShowUpdateBlog(false);
+      setIsUpdated(!isUpdated);
     } catch (error) {
       console.error("Error updating blog:", error);
       toast.error("Failed to update blog.");
@@ -45,50 +44,66 @@ const UpdateBlog = ({ id, setShowUpdateBlog }) => {
   }
 
   return (
-    <div className="w-full container mx-auto flex flex-col gap-4">
-      <p className="text-3xl font-bold container mx-auto mb-6">
-        Update Your Blog
-      </p>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-2 w-full">
-          <label>Blog Title</label>
-          <input
-            {...register("title")}
-            className="bg-[#3B1C32] w-3/4 p-3 rounded-md"
-          />
-        </div>
-        <div className="flex flex-col gap-2 w-full">
-          <label>Blog Content</label>
-          <textarea
-            rows={5}
-            {...register("content")}
-            className="bg-[#3B1C32] w-3/4 p-3 rounded-md"
-          />
-        </div>
-        <div>
-          <label className="flex flex-col gap-2 w-full">Blog Author</label>
-          <input
-            {...register("author")}
-            className="bg-[#3B1C32] w-3/4 p-3 rounded-md"
-          />
-        </div>
-        <div className="pt-4">
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="bg-[#6A1E55] text-white px-4 py-2 rounded"
-          >
-            {isSubmitting ? "Updating..." : "Update"}
-          </button>
-        </div>
-      </form>
-      <div>
-        <button
-          onClick={() => setShowUpdateBlog((prev) => !prev)}
-          className="bg-[#6A1E55] text-white px-4 py-2 rounded"
-        >
-          Cancel
-        </button>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm">
+      <div className="bg-[#262626] text-white w-[90%] max-w-lg p-6 rounded-lg shadow-lg">
+        <h2 className="text-2xl font-bold mb-4 text-center">
+          Update Your Blog
+        </h2>
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <label className="text-gray-300">Blog Title</label>
+            <input
+              {...register("title", { required: "Title is required" })}
+              className="bg-[#3B1C32] w-full p-3 rounded-md outline-none focus:ring-2 focus:ring-[#6A1E55]"
+            />
+            {errors.title && (
+              <span className="text-red-400 text-sm">
+                {errors.title.message}
+              </span>
+            )}
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-gray-300">Blog Content</label>
+            <textarea
+              rows={5}
+              {...register("content", { required: "Content is required" })}
+              className="bg-[#3B1C32] w-full p-3 rounded-md outline-none focus:ring-2 focus:ring-[#6A1E55]"
+            />
+            {errors.content && (
+              <span className="text-red-400 text-sm">
+                {errors.content.message}
+              </span>
+            )}
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-gray-300">Blog Author</label>
+            <input
+              {...register("author", { required: "Author is required" })}
+              className="bg-[#3B1C32] w-full p-3 rounded-md outline-none focus:ring-2 focus:ring-[#6A1E55]"
+            />
+            {errors.author && (
+              <span className="text-red-400 text-sm">
+                {errors.author.message}
+              </span>
+            )}
+          </div>
+          <div className="flex justify-between mt-4">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="bg-[#6A1E55] text-white px-4 py-2 rounded-lg transition-all duration-300 hover:bg-[#891F6D] disabled:opacity-50"
+            >
+              {isSubmitting ? "Updating..." : "Update"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowUpdateBlog(false)}
+              className="bg-gray-700 text-white px-4 py-2 rounded-lg transition-all duration-300 hover:bg-gray-600"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

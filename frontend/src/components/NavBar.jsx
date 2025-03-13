@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { logout } from "../redux/features/authSlice";
 
 const NavBar = () => {
+  const role = useSelector((state) => state.auth.role);
   const API_URL = process.env.REACT_APP_API_URL;
   const isAuthenticated =
     useSelector((state) => state.auth.isAuthenticated) || false;
@@ -33,12 +34,14 @@ const NavBar = () => {
     <nav className="my-4">
       <div className="flex justify-between items-center space-x-6 container mx-auto">
         <p className="text-3xl font-bold">Blogs</p>
-        <Link
-          to="/createBlog"
-          className="px-6 py-2 bg-blue-500 text-white rounded-lg"
-        >
-          Create Blog
-        </Link>
+        {role === "admin" && (
+          <Link
+            to="/createBlog"
+            className="px-6 py-2 bg-blue-500 text-white rounded-lg"
+          >
+            Create Blog
+          </Link>
+        )}
         {isAuthenticated ? (
           <p
             onClick={handleLogout}
