@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import useGetBlogs from "../hooks/useGetBlogs";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import UpdateBlog from "../components/UpdateBlog";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../redux/features/authSlice";
+import { useDispatch } from "react-redux";
 import { fetchBlogs } from "../redux/features/blogSlice";
+import NavBar from "../components/NavBar";
 
 const Blogs = () => {
   const API_URL = process.env.REACT_APP_API_URL;
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -45,48 +44,9 @@ const Blogs = () => {
     navigate("/readBlog", { state: { id } });
   }
 
-  function handleLogout() {
-    try {
-      axios.get(`${API_URL}/api/v1/user/logout`, {
-        withCredentials: true,
-      });
-      toast.success("Logged out successfully");
-      navigate("/login");
-      dispatch(logout());
-    } catch (error) {
-      toast.error("Error in logging out");
-    }
-  }
-
-  function handleLogin() {
-    navigate("/login");
-  }
-
   return (
     <div className="w-full h-screen flex flex-col bg-[#1A1A1D] text-white gap-5">
-      <div className="flex items-center justify-between container mx-auto">
-        <p className="text-3xl font-bold mb-6">Blogs</p>
-        <Link to={"/createBlog"} className="px-4 py-1 bg-blue-500 rounded-full">
-          Create Blog
-        </Link>
-        <p>
-          {isAuthenticated ? (
-            <p
-              onClick={handleLogout}
-              className="px-5 py-2 bg-red-500 cursor-pointer rounded-sm"
-            >
-              LogOut
-            </p>
-          ) : (
-            <p
-              onClick={handleLogin}
-              className="px-5 py-2 bg-blue-500 cursor-pointer rounded-sm"
-            >
-              LogIn
-            </p>
-          )}
-        </p>
-      </div>
+      <NavBar />
       <div>
         {loading ? (
           <p className="text-center">Loading blogs...</p>
