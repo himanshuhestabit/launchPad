@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchBlogs } from "../redux/features/blogSlice";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
+import Pagination from "../components/Pagination";
 
 const Blogs = () => {
   const role = useSelector((state) => state.auth.role);
@@ -42,10 +43,31 @@ const Blogs = () => {
     navigate("/readBlog", { state: { id } });
   }
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const blogsPerPage = 6;
+
+  const totalPages = Math.ceil(blogs.length / blogsPerPage);
+
+  const indexOfLastBlog = currentPage * blogsPerPage;
+  const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
+  const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
+
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
   return (
     <div className="w-full min-h-screen flex flex-col bg-[#1A1A1D] text-white gap-5">
       <NavBar />
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto p-6 min-h-[70vh] flex  items-center justify-center ">
         {loading ? (
           <p className="text-center text-xl">Loading blogs...</p>
         ) : error ? (
@@ -54,7 +76,7 @@ const Blogs = () => {
           <p className="text-center text-lg">No blogs available</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {blogs.map((item) => (
+            {currentBlogs.map((item) => (
               <div
                 key={item.id || item._id}
                 className="bg-[#3B1C32] p-6 rounded-lg shadow-lg flex flex-col justify-between"
@@ -69,7 +91,7 @@ const Blogs = () => {
                 <div className="flex justify-between mt-4">
                   <button
                     onClick={() => handleRead(item._id)}
-                    className="bg-blue-500 px-4 py-2 rounded-md hover:bg-blue-600 transition"
+                    className="bg-blue-600 px-4 py-2 rounded-md hover:bg-blue-700 transition"
                   >
                     Read Blog
                   </button>
@@ -77,13 +99,13 @@ const Blogs = () => {
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleUpdate(item._id)}
-                        className="bg-yellow-500 px-4 py-2 rounded-md hover:bg-yellow-600 transition"
+                        className="bg-yellow-600 px-4 py-2 rounded-md hover:bg-yellow-700 transition"
                       >
                         Update
                       </button>
                       <button
                         onClick={() => handleDelete(item._id)}
-                        className="bg-red-500 px-4 py-2 rounded-md hover:bg-red-600 transition"
+                        className="bg-red-600 px-4 py-2 rounded-md hover:bg-red-700 transition"
                       >
                         Delete
                       </button>
@@ -95,6 +117,12 @@ const Blogs = () => {
           </div>
         )}
       </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        nextPage={nextPage}
+        prevPage={prevPage}
+      />
       <Footer />
       {showUpdateBlog && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">

@@ -91,14 +91,14 @@ const UpdateBlog = ({ id, setShowUpdateBlog }) => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="bg-[#6A1E55] text-white px-4 py-2 rounded-lg transition-all duration-300 hover:bg-[#891F6D] disabled:opacity-50"
+              className="bg-green-600 text-white px-4 py-2 rounded-lg transition-all duration-300 hover:bg-green-700 disabled:opacity-50"
             >
               {isSubmitting ? "Updating..." : "Update"}
             </button>
             <button
               type="button"
               onClick={() => setShowUpdateBlog(false)}
-              className="bg-gray-700 text-white px-4 py-2 rounded-lg transition-all duration-300 hover:bg-gray-600"
+              className="bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300 hover:bg-red-700"
             >
               Cancel
             </button>

@@ -68,9 +68,8 @@ const Register = () => {
               />
             </div>
             <div>
-              {/* <input type="submit" value="Submit" /> */}
               <input
-                className="bg-[#1A1A1D] text-white px-4 py-2 rounded-lg hover:bg-[#101012] cursor-pointer transition-all duration-300"
+                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 cursor-pointer transition-all duration-300"
                 type="submit"
                 value={isSubmitting ? "Submitting..." : "Submit"}
                 disabled={isSubmitting}
