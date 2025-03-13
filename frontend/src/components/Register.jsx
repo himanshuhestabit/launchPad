@@ -31,51 +31,63 @@ const Register = () => {
 
   return (
     <div className="w-full h-screen flex items-center justify-center bg-[#1A1A1D] text-white flex-col">
-      <div>
-        <p className="text-3xl font-bold container mx-auto mb-6">
-          {" "}
-          Register User
-        </p>
-      </div>
-      <div className="w-full">
-        <form
-          action=""
-          onSubmit={handleSubmit(onSubmit)}
-          className="w-full container mx-auto flex flex-col gap-4"
-        >
-          <div className="flex flex-col gap-2 w-full">
-            <label htmlFor="">Name</label>
-            <input
-              {...register("name")}
-              className="bg-[#3B1C32] w-3/4 p-3 rounded-md"
+      <div className="bg-[#3B1C32] w-2/4 h-2/4 rounded-xl flex flex-col items-center justify-center">
+        <div>
+          <p className="text-3xl font-bold container mx-auto mb-6">
+            {" "}
+            Register User
+          </p>
+        </div>
+        <div className="w-[90%] flex">
+          <form
+            action=""
+            onSubmit={handleSubmit(onSubmit)}
+            className="w-full flex flex-col gap-4"
+          >
+            <div className="flex flex-col gap-2 w-full">
+              <label htmlFor="">Name</label>
+              <input
+                {...register("name")}
+                className="bg-[#1A1A1D] w-3/4 p-3 rounded-md"
+              />
+            </div>
+            <div className="flex flex-col gap-2 w-full">
+              <label htmlFor="">Email</label>
+              <input
+                {...register("email")}
+                className="bg-[#1A1A1D] w-3/4 p-3 rounded-md"
+              />
+            </div>
+            <div className="flex flex-col gap-2 w-full">
+              <label htmlFor="">Password</label>
+              <input
+                {...register("password")}
+                className="bg-[#1A1A1D] w-3/4 p-3 rounded-md"
+              />
+            </div>
+            <div>
+              {/* <input type="submit" value="Submit" /> */}
+              <input
+                className="bg-[#1A1A1D] text-white px-4 py-2 rounded-lg hover:bg-[#101012] cursor-pointer transition-all duration-300"
+                type="submit"
+                value={isSubmitting ? "Submitting..." : "Submit"}
+                disabled={isSubmitting}
+              />
+            </div>
+          </form>
+          <div className="text-center flex flex-col items-center justify-center">
+            <img
+              className="bg-transparent bg-cover w-[85%] h-auto pb-3 "
+              src="https://img.freepik.com/free-vector/mobile-login-concept-illustration_114360-83.jpg?t=st=1741858072~exp=1741861672~hmac=55fa744dd2302e6816a8128fa88d8e07af1f648d79d62e8d0e53b0c4b79188ae&w=740"
+              alt="login Image"
             />
+            <Link
+              to="/login"
+              className="cursor-pointer text-blue-200 hover:text-blue-300 transition-all duration-300 "
+            >
+              Already have an account? Login
+            </Link>
           </div>
-          <div className="flex flex-col gap-2 w-full">
-            <label htmlFor="">Email</label>
-            <input
-              {...register("email")}
-              className="bg-[#3B1C32] w-3/4 p-3 rounded-md"
-            />
-          </div>
-          <div className="flex flex-col gap-2 w-full">
-            <label htmlFor="">Password</label>
-            <input
-              {...register("password")}
-              className="bg-[#3B1C32] w-3/4 p-3 rounded-md"
-            />
-          </div>
-          <div>
-            {/* <input type="submit" value="Submit" /> */}
-            <input
-              className="bg-[#6A1E55] text-white px-4 py-2 rounded"
-              type="submit"
-              value={isSubmitting ? "Submitting..." : "Submit"}
-              disabled={isSubmitting}
-            />
-          </div>
-        </form>
-        <div className="text-center text-blue-300">
-          <Link to="/login">Already have an account? Login</Link>
         </div>
       </div>
     </div>
