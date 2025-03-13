@@ -30,7 +30,7 @@ const NavBar = () => {
   }
 
   return (
-    <div className="my-4">
+    <nav className="my-4">
       <div className="flex justify-between items-center space-x-6 container mx-auto">
         <p className="text-3xl font-bold">Blogs</p>
         <Link
@@ -55,7 +55,7 @@ const NavBar = () => {
           </p>
         )}
       </div>
-    </div>
+    </nav>
   );
 };
 

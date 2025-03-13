@@ -7,6 +7,7 @@ import UpdateBlog from "../components/UpdateBlog";
 import { useDispatch } from "react-redux";
 import { fetchBlogs } from "../redux/features/blogSlice";
 import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
 
 const Blogs = () => {
   const API_URL = process.env.REACT_APP_API_URL;
@@ -88,6 +89,7 @@ const Blogs = () => {
           ))
         )}
       </div>
+      <Footer />
     </div>
   );
 };
