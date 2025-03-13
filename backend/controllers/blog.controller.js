@@ -96,3 +96,16 @@ export const deleteBlog = async (req, res) => {
     return res.status(500).json({ succes: false, message: error.message });
   }
 };
+
+export const getRecentBlogs = async (req, res) => {
+  try {
+    const recentBlog = await Blog.find({}).sort({ createdAt: -1 }).limit(5);
+    return res
+      .status(200)
+      .json({ success: true, message: "Blog Found Successfully", recentBlog });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Error in getting Recent Blogs" });
+  }
+};
