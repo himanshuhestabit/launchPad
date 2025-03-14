@@ -31,9 +31,11 @@ const NavBar = () => {
   }
 
   return (
-    <nav className="my-4">
+    <nav className="py-4 bg-[#1A1A1D] text-white">
       <div className="flex justify-between items-center space-x-6 container mx-auto">
-        <p className="text-3xl font-bold">Blogs</p>
+        <Link className="text-3xl font-bold" to={"/blog"}>
+          Blogs
+        </Link>
         {role === "admin" && (
           <Link
             to="/createBlog"

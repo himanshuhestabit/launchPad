@@ -5,10 +5,13 @@ import CreateBlog from "./Pages/CreateBlog";
 import ReadBlog from "./Pages/ReadBlog";
 import Authentication from "./Pages/Authentication";
 import Login from "./components/Login";
+import Footer from "./components/Footer";
+import NavBar from "./components/NavBar";
 const App = () => {
   return (
     <div>
       <BrowserRouter>
+        <NavBar />
         <Routes>
           <Route path="/" element={<Authentication />} />
           <Route path="/login" element={<Login />} />
@@ -16,6 +19,7 @@ const App = () => {
           <Route path="/createBlog" element={<CreateBlog />} />
           <Route path="/readBlog" element={<ReadBlog />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </div>
   );

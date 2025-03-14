@@ -66,7 +66,6 @@ const Blogs = () => {
 
   return (
     <div className="w-full min-h-screen flex flex-col bg-[#1A1A1D] text-white gap-5">
-      <NavBar />
       <div className="container mx-auto p-6 min-h-[70vh] flex  items-center justify-center ">
         {loading ? (
           <p className="text-center text-xl">Loading blogs...</p>
@@ -123,7 +122,6 @@ const Blogs = () => {
         nextPage={nextPage}
         prevPage={prevPage}
       />
-      <Footer />
       {showUpdateBlog && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">
           <UpdateBlog

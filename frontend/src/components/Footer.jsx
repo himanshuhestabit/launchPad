@@ -3,8 +3,8 @@ import React from "react";
 const Footer = () => {
   return (
     <footer>
-      <div className="">
-        <p className="font-thin text-gray-400 text-center pt-4">
+      <div className="bg-[#1A1A1D] text-white">
+        <p className="font-thin text-gray-400 text-center ">
           All Rights Reserved 2025
         </p>
       </div>
