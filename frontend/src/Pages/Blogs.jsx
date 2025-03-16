@@ -9,6 +9,7 @@ import { fetchBlogs } from "../redux/features/blogSlice";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import Pagination from "../components/Pagination";
+import SearchBlog from "../components/SearchBlog";
 
 const Blogs = () => {
   const role = useSelector((state) => state.auth.role);
@@ -66,6 +67,10 @@ const Blogs = () => {
 
   return (
     <div className="w-full min-h-screen flex flex-col bg-[#1A1A1D] text-white gap-5">
+      <div>
+        <SearchBlog />
+      </div>
+
       <div className="container mx-auto p-6 min-h-[70vh] flex  items-center justify-center ">
         {loading ? (
           <p className="text-center text-xl">Loading blogs...</p>

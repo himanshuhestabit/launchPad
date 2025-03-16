@@ -109,3 +109,29 @@ export const getRecentBlogs = async (req, res) => {
       .json({ success: false, message: "Error in getting Recent Blogs" });
   }
 };
+
+export const searchBlog = async (req, res) => {
+  try {
+    const { title } = req.body;
+    if (!title) {
+      return res
+        .status(404)
+        .json({ succes: false, message: "Please Write SomeThing" });
+    }
+    const searchedBlogs = await Blog.find({
+      $or: [{ title: { $regex: title, $options: "i" } }],
+    });
+    if (!searchedBlogs) {
+      return res
+        .status(404)
+        .json({ succes: false, message: "No Blogs Exists" });
+    }
+    return res
+      .status(200)
+      .json({ succes: true, message: "Found Successfully", searchedBlogs });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ succes: false, message: "Error in finding blogs" });
+  }
+};
