@@ -3,6 +3,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
 const Register = () => {
   const imageUrl =
     "https://img.freepik.com/free-vector/mobile-login-concept-illustration_114360-83.jpg?t=st=1741858072~exp=1741861672~hmac=55fa744dd2302e6816a8128fa88d8e07af1f648d79d62e8d0e53b0c4b79188ae&w=740";
@@ -11,7 +12,6 @@ const Register = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm();
 
@@ -21,7 +21,6 @@ const Register = () => {
         `${API_URL}/api/v1/user/register`,
         data
       );
-      console.log("User registered successfully:", response.data);
       if (response.status === 201) {
         navigate("/login");
       }
@@ -32,63 +31,70 @@ const Register = () => {
   }
 
   return (
-    <div className="w-full h-screen flex items-center justify-center bg-[#1A1A1D] text-white flex-col">
-      <div className="bg-[#3B1C32] w-2/4 h-2/4 rounded-xl flex flex-col items-center justify-center">
-        <div>
-          <p className="text-3xl font-bold container mx-auto mb-6">
-            {" "}
-            Register User
-          </p>
-        </div>
-        <div className="w-[90%] flex">
+    <div className="w-full min-h-screen flex items-center justify-center bg-[#1A1A1D] text-white px-4">
+      <div className="bg-[#3B1C32] w-full max-w-4xl rounded-xl flex flex-col md:flex-row items-center justify-center p-6 md:p-10 shadow-lg">
+        {/* Left Side: Register Form */}
+        <div className="w-full md:w-1/2 flex flex-col items-center">
+          <p className="text-2xl md:text-3xl font-bold mb-6">Register User</p>
           <form
-            action=""
             onSubmit={handleSubmit(onSubmit)}
             className="w-full flex flex-col gap-4"
           >
             <div className="flex flex-col gap-2 w-full">
-              <label htmlFor="">Name</label>
+              <label>Name</label>
               <input
-                {...register("name")}
-                className="bg-[#1A1A1D] w-3/4 p-3 rounded-md"
+                {...register("name", { required: "Name is required" })}
+                className="bg-[#1A1A1D] w-full p-3 rounded-md"
               />
+              {errors.name && (
+                <p className="text-red-500">{errors.name.message}</p>
+              )}
             </div>
             <div className="flex flex-col gap-2 w-full">
-              <label htmlFor="">Email</label>
+              <label>Email</label>
               <input
-                {...register("email")}
-                className="bg-[#1A1A1D] w-3/4 p-3 rounded-md"
+                {...register("email", { required: "Email is required" })}
+                className="bg-[#1A1A1D] w-full p-3 rounded-md"
               />
+              {errors.email && (
+                <p className="text-red-500">{errors.email.message}</p>
+              )}
             </div>
             <div className="flex flex-col gap-2 w-full">
-              <label htmlFor="">Password</label>
+              <label>Password</label>
               <input
-                {...register("password")}
-                className="bg-[#1A1A1D] w-3/4 p-3 rounded-md"
+                type="password"
+                {...register("password", { required: "Password is required" })}
+                className="bg-[#1A1A1D] w-full p-3 rounded-md"
               />
+              {errors.password && (
+                <p className="text-red-500">{errors.password.message}</p>
+              )}
             </div>
             <div>
               <input
-                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 cursor-pointer transition-all duration-300"
+                className="bg-green-600 text-white w-full px-4 py-2 rounded-lg hover:bg-green-700 cursor-pointer transition-all duration-300"
                 type="submit"
                 value={isSubmitting ? "Submitting..." : "Submit"}
                 disabled={isSubmitting}
               />
             </div>
           </form>
-          <div className="text-center flex flex-col items-center justify-center">
-            <img
-              className="bg-transparent bg-cover w-[85%] h-auto pb-3 "
-              src={imageUrl}
-              alt="Register Image"
-            />
-            <Link
-              to="/login"
-              className="cursor-pointer text-blue-200 hover:text-blue-300 transition-all duration-300 "
-            >
-              Already have an account? Login
-            </Link>
-          </div>
+          <Link
+            to="/login"
+            className="mt-4 text-blue-200 hover:text-blue-300 transition-all duration-300"
+          >
+            Already have an account? Login
+          </Link>
+        </div>
+
+        {/* Right Side: Image */}
+        <div className="hidden md:flex w-full md:w-1/2 justify-center">
+          <img
+            className="bg-transparent bg-cover w-3/4"
+            src={imageUrl}
+            alt="Register"
+          />
         </div>
       </div>
     </div>

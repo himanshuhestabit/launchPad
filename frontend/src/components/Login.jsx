@@ -35,14 +35,10 @@ const Login = () => {
   }
 
   return (
-    <div className="w-full h-screen flex items-center justify-center bg-[#1A1A1D] text-white flex-col">
-      <div className="bg-[#3B1C32] w-2/4 h-2/4 rounded-xl flex flex-col items-center justify-center">
-        <div>
-          <p className="text-3xl font-bold container mx-auto mb-6">
-            Login User
-          </p>
-        </div>
-        <div className="w-[90%] flex">
+    <div className="w-full min-h-screen flex items-center justify-center bg-[#1A1A1D] text-white px-4">
+      <div className="bg-[#3B1C32] w-full max-w-4xl rounded-xl flex flex-col md:flex-row items-center justify-center p-6 md:p-10 shadow-lg">
+        <div className="w-full md:w-1/2 flex flex-col items-center">
+          <p className="text-2xl md:text-3xl font-bold mb-6">Login User</p>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="w-full flex flex-col gap-4"
@@ -51,7 +47,7 @@ const Login = () => {
               <label htmlFor="email">Email</label>
               <input
                 {...register("email", { required: "Email is required" })}
-                className="bg-[#1A1A1D] w-3/4 p-3 rounded-md"
+                className="bg-[#1A1A1D] w-full p-3 rounded-md"
               />
               {errors.email && (
                 <p className="text-red-500">{errors.email.message}</p>
@@ -62,7 +58,7 @@ const Login = () => {
               <input
                 type="password"
                 {...register("password", { required: "Password is required" })}
-                className="bg-[#1A1A1D] w-3/4 p-3 rounded-md"
+                className="bg-[#1A1A1D] w-full p-3 rounded-md"
               />
               {errors.password && (
                 <p className="text-red-500">{errors.password.message}</p>
@@ -70,26 +66,27 @@ const Login = () => {
             </div>
             <div>
               <input
-                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 cursor-pointer transition-all duration-300"
+                className="bg-green-600 text-white w-full px-4 py-2 rounded-lg hover:bg-green-700 cursor-pointer transition-all duration-300"
                 type="submit"
                 value={isSubmitting ? "Submitting..." : "Submit"}
                 disabled={isSubmitting}
               />
             </div>
           </form>
-          <div className="text-center flex flex-col items-center justify-center">
-            <img
-              className="bg-transparent bg-cover w-[85%] h-auto pb-3"
-              src={imageUrl}
-              alt="login Image"
-            />
-            <Link
-              to="/"
-              className="cursor-pointer text-blue-200 hover:text-blue-300 transition-all duration-300"
-            >
-              New User? Register
-            </Link>
-          </div>
+          <Link
+            to="/"
+            className="mt-4 text-blue-200 hover:text-blue-300 transition-all duration-300"
+          >
+            New User? Register
+          </Link>
+        </div>
+
+        <div className="hidden md:flex w-full md:w-1/2 justify-center">
+          <img
+            className="bg-transparent bg-cover w-3/4"
+            src={imageUrl}
+            alt="Login"
+          />
         </div>
       </div>
     </div>
