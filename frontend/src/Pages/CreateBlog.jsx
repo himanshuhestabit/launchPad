@@ -33,9 +33,9 @@ const CreateBlog = () => {
   }
 
   return (
-    <div className="w-full h-screen flex items-center justify-center bg-[#1A1A1D] text-white flex-col">
-      <div className="bg-[#3B1C32] w-3/5 p-8 rounded-xl flex flex-col items-center justify-center shadow-lg">
-        <p className="text-3xl font-bold mb-6">Create Your Blog</p>
+    <div className="w-full min-h-screen flex items-center justify-center bg-[#1A1A1D] text-white flex-col p-4">
+      <div className="bg-[#3B1C32] w-full max-w-3xl p-8 rounded-xl flex flex-col items-center justify-center shadow-lg">
+        <p className="text-3xl font-bold mb-6 text-center">Create Your Blog</p>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="w-full flex flex-col gap-4"
@@ -91,7 +91,7 @@ const CreateBlog = () => {
           </div>
           <div>
             <input
-              className="bg-[#6A1E55] text-white px-6 py-2 rounded-md cursor-pointer hover:bg-[#8A2D70] transition-all duration-300"
+              className="bg-[#6A1E55] text-white px-6 py-2 rounded-md cursor-pointer hover:bg-[#8A2D70] transition-all duration-300 w-full"
               type="submit"
               value={isSubmitting ? "Submitting..." : "Submit"}
               disabled={isSubmitting}

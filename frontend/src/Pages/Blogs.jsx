@@ -6,8 +6,6 @@ import { useNavigate } from "react-router-dom";
 import UpdateBlog from "../components/UpdateBlog";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBlogs } from "../redux/features/blogSlice";
-import NavBar from "../components/NavBar";
-import Footer from "../components/Footer";
 import Pagination from "../components/Pagination";
 import SearchBlog from "../components/SearchBlog";
 
@@ -46,9 +44,7 @@ const Blogs = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const blogsPerPage = 6;
-
   const totalPages = Math.ceil(blogs.length / blogsPerPage);
-
   const indexOfLastBlog = currentPage * blogsPerPage;
   const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
   const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
@@ -67,11 +63,9 @@ const Blogs = () => {
 
   return (
     <div className="w-full min-h-screen flex flex-col bg-[#1A1A1D] text-white gap-5">
-      <div>
-        <SearchBlog />
-      </div>
+      <SearchBlog />
 
-      <div className="container mx-auto p-6 min-h-[70vh] flex  items-center justify-center ">
+      <div className="container mx-auto p-6 min-h-[70vh] flex flex-col items-center justify-center ">
         {loading ? (
           <p className="text-center text-xl">Loading blogs...</p>
         ) : error ? (
@@ -79,7 +73,7 @@ const Blogs = () => {
         ) : blogs.length === 0 ? (
           <p className="text-center text-lg">No blogs available</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
             {currentBlogs.map((item) => (
               <div
                 key={item.id || item._id}
@@ -92,7 +86,7 @@ const Blogs = () => {
                   </p>
                   <p className="text-sm text-gray-300">Author: {item.author}</p>
                 </div>
-                <div className="flex justify-between mt-4">
+                <div className="flex flex-col sm:flex-row justify-between mt-4 gap-2">
                   <button
                     onClick={() => handleRead(item._id)}
                     className="bg-blue-600 px-4 py-2 rounded-md hover:bg-blue-700 transition"
@@ -100,7 +94,7 @@ const Blogs = () => {
                     Read Blog
                   </button>
                   {role === "admin" && (
-                    <div className="flex gap-2">
+                    <div className="flex flex-col sm:flex-row gap-2">
                       <button
                         onClick={() => handleUpdate(item._id)}
                         className="bg-yellow-600 px-4 py-2 rounded-md hover:bg-yellow-700 transition"
