@@ -4,15 +4,19 @@ import { fetchBlogs } from "../redux/features/blogSlice";
 
 const useGetBlogs = () => {
   const dispatch = useDispatch();
-  const { blogs, loading, error } = useSelector(
-    (state) => state.blogs || { blogs: [] }
+  const {
+    blogs = [],
+    loading = false,
+    error = null,
+  } = useSelector(
+    (state) => state.blogs || { blogs: [], loading: false, error: null }
   );
 
   useEffect(() => {
     dispatch(fetchBlogs());
   }, [dispatch]);
 
-  return { blogs: Array.isArray(blogs) ? blogs : [], loading, error };
+  return { blogs, loading, error };
 };
 
 export default useGetBlogs;

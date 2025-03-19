@@ -8,6 +8,9 @@ import Login from "./components/Login";
 import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
 const App = () => {
+  const user = JSON.parse(localStorage.getItem("isAuthenticated"));
+  console.log(user);
+
   return (
     <div>
       <BrowserRouter>

@@ -3,6 +3,7 @@ import useGetBlogDetails from "../hooks/useGetBlogDetails";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const UpdateBlog = ({ id, setShowUpdateBlog }) => {
   const API_URL = process.env.REACT_APP_API_URL;

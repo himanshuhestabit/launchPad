@@ -1,10 +1,17 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Register = () => {
+  const user = JSON.parse(localStorage.getItem("isAuthenticated"));
+  console.log(user);
+  useEffect(() => {
+    if (user) {
+      navigate("/blog");
+    }
+  }, []);
   const imageUrl =
     "https://img.freepik.com/free-vector/mobile-login-concept-illustration_114360-83.jpg?t=st=1741858072~exp=1741861672~hmac=55fa744dd2302e6816a8128fa88d8e07af1f648d79d62e8d0e53b0c4b79188ae&w=740";
   const API_URL = process.env.REACT_APP_API_URL;
@@ -45,6 +52,8 @@ const Register = () => {
               <input
                 {...register("name", { required: "Name is required" })}
                 className="bg-[#1A1A1D] w-full p-3 rounded-md"
+                autoComplete="off"
+                placeholder="Enter Your Name"
               />
               {errors.name && (
                 <p className="text-red-500">{errors.name.message}</p>
@@ -53,8 +62,11 @@ const Register = () => {
             <div className="flex flex-col gap-2 w-full">
               <label>Email</label>
               <input
+                type="email"
                 {...register("email", { required: "Email is required" })}
                 className="bg-[#1A1A1D] w-full p-3 rounded-md"
+                placeholder="Enter Your Email"
+                autoComplete="off"
               />
               {errors.email && (
                 <p className="text-red-500">{errors.email.message}</p>
@@ -66,6 +78,8 @@ const Register = () => {
                 type="password"
                 {...register("password", { required: "Password is required" })}
                 className="bg-[#1A1A1D] w-full p-3 rounded-md"
+                placeholder="Enter Your Password"
+                autoComplete="off"
               />
               {errors.password && (
                 <p className="text-red-500">{errors.password.message}</p>

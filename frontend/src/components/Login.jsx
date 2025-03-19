@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -7,6 +7,8 @@ import { useDispatch } from "react-redux";
 import { loginSuccess } from "../redux/features/authSlice";
 
 const Login = () => {
+  const user = JSON.parse(localStorage.getItem("isAuthenticated"));
+  console.log(user);
   const imageUrl =
     "https://img.freepik.com/free-vector/secure-login-concept-illustration_114360-4685.jpg?t=st=1741859293~exp=1741862893~hmac=d111e44bc18cd67482ca875a45b9c9bda51cbde3576e2bcb2f3a52e4be8278b8&w=740";
   const API_URL = process.env.REACT_APP_API_URL;
@@ -17,7 +19,11 @@ const Login = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
-
+  useEffect(() => {
+    if (user) {
+      navigate("/blog");
+    }
+  }, []);
   async function onSubmit(data) {
     try {
       const response = await axios.post(`${API_URL}/api/v1/user/login`, data, {
@@ -48,6 +54,8 @@ const Login = () => {
               <input
                 {...register("email", { required: "Email is required" })}
                 className="bg-[#1A1A1D] w-full p-3 rounded-md"
+                autoComplete="off"
+                placeholder="Enter Your Email"
               />
               {errors.email && (
                 <p className="text-red-500">{errors.email.message}</p>
@@ -59,6 +67,8 @@ const Login = () => {
                 type="password"
                 {...register("password", { required: "Password is required" })}
                 className="bg-[#1A1A1D] w-full p-3 rounded-md"
+                autoComplete="off"
+                placeholder="Enter Your Password"
               />
               {errors.password && (
                 <p className="text-red-500">{errors.password.message}</p>

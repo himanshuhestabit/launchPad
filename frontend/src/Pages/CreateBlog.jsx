@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -6,6 +6,17 @@ import { useNavigate } from "react-router-dom";
 
 const CreateBlog = () => {
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("isAuthenticated"));
+  const userRole = localStorage.getItem("role");
+  console.log(userRole);
+  useEffect(() => {
+    if (userRole !== "admin") {
+      navigate("/blog");
+    } else if (!user) {
+      navigate("/login");
+    }
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -76,6 +87,7 @@ const CreateBlog = () => {
           <div className="flex flex-col gap-2 w-full">
             <label>Enter Author</label>
             <input
+              autoComplete="off"
               className="bg-[#1A1A1D] text-white w-full p-3 rounded-md border border-gray-500 focus:outline-none focus:border-purple-400"
               {...register("author", {
                 required: "Author is required",
