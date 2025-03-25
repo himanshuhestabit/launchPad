@@ -35,7 +35,10 @@ const NavBar = () => {
   return (
     <nav className="py-5 bg-white text-black shadow-md">
       <div className="max-w-[1500px] mx-auto flex justify-between items-center ">
-        <Link className="text-3xl font-bold" to={"/blog"}>
+        <Link
+          className="text-3xl font-black bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text"
+          to={"/blog"}
+        >
           Blogs
         </Link>
 
@@ -65,7 +68,7 @@ const NavBar = () => {
           ) : (
             <p
               onClick={handleLogin}
-              className="px-6 py-2 bg-blue-500 text-white cursor-pointer rounded-lg"
+              className="px-6 py-2 bg-gradient-to-r from-[#007FFF] to-[#6CB4EE] hover:from-[#1034A6] hover:to-[#00BFFF] text-white cursor-pointer rounded-lg animaion-all duration-300"
             >
               LogIn
             </p>
