@@ -1,5 +1,7 @@
 import axios from "axios";
 import React, { useEffect } from "react";
+import { MdEmail, MdError } from "react-icons/md";
+import { RiLockPasswordFill } from "react-icons/ri";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -8,9 +10,8 @@ import { loginSuccess } from "../redux/features/authSlice";
 
 const Login = () => {
   const user = JSON.parse(localStorage.getItem("isAuthenticated"));
-  console.log(user);
   const imageUrl =
-    "https://img.freepik.com/free-vector/secure-login-concept-illustration_114360-4685.jpg?t=st=1741859293~exp=1741862893~hmac=d111e44bc18cd67482ca875a45b9c9bda51cbde3576e2bcb2f3a52e4be8278b8&w=740";
+    "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
   const API_URL = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -41,62 +42,100 @@ const Login = () => {
   }
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-[#1A1A1D] text-white px-4">
-      <div className="bg-[#3B1C32] w-full max-w-4xl rounded-xl flex flex-col md:flex-row items-center justify-center p-6 md:p-10 shadow-lg">
-        <div className="w-full md:w-1/2 flex flex-col items-center">
-          <p className="text-2xl md:text-3xl font-bold mb-6">Login User</p>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="w-full flex flex-col gap-4"
-          >
-            <div className="flex flex-col gap-2 w-full">
-              <label htmlFor="email">Email</label>
-              <input
-                {...register("email", { required: "Email is required" })}
-                className="bg-[#1A1A1D] w-full p-3 rounded-md"
-                autoComplete="off"
-                placeholder="Enter Your Email"
-              />
-              {errors.email && (
-                <p className="text-red-500">{errors.email.message}</p>
-              )}
+    <div className="w-full h-[90vh]">
+      <div className="max-w-[1490px] mx-auto flex items-center justify-between h-full gap-4">
+        <div className="w-2/4  h-full py-16">
+          <div>
+            <p className="text-4xl font-black pb-3">Welcome to Blog App</p>
+            <p className="text-2xl font-bold pb-4">Please Login To Continue</p>
+            <p className="font-thin">
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+              Doloribus eaque amet saepe assumenda commodi deleniti impedit
+              accusamus soluta quidem ex.
+            </p>
+          </div>
+          <div className="pt-12">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="w-full flex flex-col gap-6 py-6"
+            >
+              <div className="flex flex-col gap-2 w-full">
+                <label
+                  htmlFor="email"
+                  className="text-lg font-semibold flex items-center gap-1"
+                >
+                  <MdEmail />
+                  Email
+                </label>
+                <input
+                  {...register("email", { required: "Email is required" })}
+                  className="bg-gray-300 w-full py-3 px-5 rounded-full outline-none"
+                  autoComplete="off"
+                  placeholder="Enter Your Email"
+                />
+                {errors.email && (
+                  <div className="flex items-center gap-1 text-red-500">
+                    <MdError />
+                    <p>{errors.email.message}</p>
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col gap-2 w-full">
+                <label
+                  htmlFor="password"
+                  className="text-lg font-semibold flex items-center gap-1"
+                >
+                  <RiLockPasswordFill />
+                  Password
+                </label>
+                <input
+                  type="password"
+                  {...register("password", {
+                    required: "Password is required",
+                  })}
+                  className="bg-gray-300 w-full py-3 px-5 rounded-full outline-none"
+                  autoComplete="off"
+                  placeholder="Enter Your Password"
+                />
+                {errors.password && (
+                  <div className="flex items-center gap-1 text-red-500">
+                    <MdError />
+                    <p>{errors.password.message}</p>
+                  </div>
+                )}
+              </div>
+              <div>
+                <input
+                  className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white px-6 py-2 rounded-lg transition-all duration-300 hover:brightness-90 cursor-pointer"
+                  type="submit"
+                  value={isSubmitting ? "Submitting..." : "Submit"}
+                  disabled={isSubmitting}
+                />
+              </div>
+            </form>
+            <div className="pt-6">
+              <p className="text-lg">
+                New User? Please{" "}
+                <Link
+                  to={"/"}
+                  className="font-bold text-blue-500 hover:text-blue-600 "
+                >
+                  Register
+                </Link>
+              </p>
             </div>
-            <div className="flex flex-col gap-2 w-full">
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                {...register("password", { required: "Password is required" })}
-                className="bg-[#1A1A1D] w-full p-3 rounded-md"
-                autoComplete="off"
-                placeholder="Enter Your Password"
-              />
-              {errors.password && (
-                <p className="text-red-500">{errors.password.message}</p>
-              )}
-            </div>
-            <div>
-              <input
-                className="bg-green-600 text-white w-full px-4 py-2 rounded-lg hover:bg-green-700 cursor-pointer transition-all duration-300"
-                type="submit"
-                value={isSubmitting ? "Submitting..." : "Submit"}
-                disabled={isSubmitting}
-              />
-            </div>
-          </form>
-          <Link
-            to="/"
-            className="mt-4 text-blue-200 hover:text-blue-300 transition-all duration-300"
-          >
-            New User? Register
-          </Link>
+          </div>
         </div>
-
-        <div className="hidden md:flex w-full md:w-1/2 justify-center">
-          <img
-            className="bg-transparent bg-cover w-3/4"
-            src={imageUrl}
-            alt="Login"
-          />
+        <div className="w-2/4 h-full flex items-center justify-center ">
+          <div className="w-[98%] h-[98%]  flex items-center justify-center border-animation">
+            <div className="w-[96%] h-[96%]  rounded-lg overflow-hidden ">
+              <img
+                src={imageUrl}
+                alt="login-page-image"
+                className="w-full h-full object-cover "
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

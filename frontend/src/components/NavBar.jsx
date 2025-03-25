@@ -33,8 +33,8 @@ const NavBar = () => {
   }
 
   return (
-    <nav className="py-4 bg-[#1A1A1D] text-white">
-      <div className="container mx-auto flex justify-between items-center px-4">
+    <nav className="py-5 bg-white text-black shadow-md">
+      <div className="max-w-[1500px] mx-auto flex justify-between items-center ">
         <Link className="text-3xl font-bold" to={"/blog"}>
           Blogs
         </Link>
