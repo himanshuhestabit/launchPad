@@ -46,7 +46,12 @@ const Login = () => {
       <div className="max-w-[1490px] mx-auto flex items-center justify-between h-full gap-4">
         <div className="w-2/4  h-full py-16">
           <div>
-            <p className="text-4xl font-black pb-3">Welcome to Blog App</p>
+            <p className="text-4xl font-black pb-3">
+              Welcome to{" "}
+              <span className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text">
+                Blog App
+              </span>
+            </p>
             <p className="text-2xl font-bold pb-4">Please Login To Continue</p>
             <p className="font-thin">
               Lorem ipsum, dolor sit amet consectetur adipisicing elit.
