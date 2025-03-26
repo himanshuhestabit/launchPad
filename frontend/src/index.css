@@ -79,3 +79,19 @@
     transform: rotate(1turn);
   }
 }
+
+.editor-wrapper {
+  border: 1px solid #666;
+  border-radius: 8px;
+  padding: 10px;
+  background: #1a1a1d;
+}
+
+.editor-content {
+  min-height: 200px;
+  color: white;
+}
+
+.editor-toolbar {
+  border-bottom: 1px solid #666;
+}

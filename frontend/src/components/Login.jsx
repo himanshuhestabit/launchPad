@@ -24,7 +24,7 @@ const Login = () => {
   } = useForm();
   useEffect(() => {
     if (user) {
-      navigate("/blog");
+      navigate("/home");
     }
   }, []);
   async function onSubmit(data) {

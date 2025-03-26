@@ -4,11 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { logout } from "../redux/features/authSlice";
-
+import { FaUserAlt } from "react-icons/fa";
 const NavBar = () => {
   const [openModal, setOpenModal] = useState(false);
-  const userImage =
-    "https://img.freepik.com/free-psd/3d-icon-social-media-app_23-2150049569.jpg?t=st=1742973848~exp=1742977448~hmac=fbb9c9db5620c0ad43116c34317e114ba636dcb6fb485abd05959e78791c6e94&w=740";
   const [user, setUser] = useState(null);
   const id = useSelector((state) => state.auth.userId);
   const API_URL = process.env.REACT_APP_API_URL;
@@ -43,6 +41,7 @@ const NavBar = () => {
       axios.get(`${API_URL}/api/v1/user/logout`, { withCredentials: true });
       toast.success("Logged out successfully");
       navigate("/login");
+      setOpenModal(false);
       dispatch(logout());
       setUser(null);
     } catch (error) {
@@ -59,7 +58,7 @@ const NavBar = () => {
       <div className="lg:max-w-[1300px] md:max-w-[800px] max-w-[300px] mx-auto flex justify-between items-center">
         <Link
           className="text-3xl font-black bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text"
-          to="/blog"
+          to="/home"
         >
           Blogs
         </Link>
@@ -68,12 +67,11 @@ const NavBar = () => {
           {isAuthenticated ? (
             <div className="flex items-start justify-center gap-2">
               <div>
-                <button onClick={handleClick}>
-                  <img
-                    src={userImage}
-                    alt=""
-                    className="w-14 h-14 rounded-full"
-                  />
+                <button
+                  onClick={handleClick}
+                  className="w-12 h-12 flex items-center justify-center bg-gradient-to-r from-[#AF57C5] to-[#D33427] rounded-full text-white text-xl"
+                >
+                  <FaUserAlt />
                 </button>
               </div>
               <div className="">

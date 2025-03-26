@@ -1,37 +1,48 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { data, useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SearchBlog = () => {
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL;
-  const [inputSearch, setInputSerach] = useState();
-  const [blogTitle, setBlogTitle] = useState();
+
+  const [inputSearch, setInputSearch] = useState("");
+  const [blogResults, setBlogResults] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  function handleChange(e) {
-    setInputSerach(e.target.value);
-  }
-  async function searchBlog() {
+
+  const handleChange = (e) => {
+    setInputSearch(e.target.value);
+  };
+
+  const handleClick = (id) => {
+    navigate("/readBlog", { state: { id } });
+  };
+
+  const searchBlog = useCallback(async () => {
+    if (!inputSearch.trim()) {
+      setBlogResults([]);
+      return;
+    }
+
     try {
       const response = await axios.post(
         `${API_URL}/api/v1/blogs/searchBlog`,
         { title: inputSearch },
         { withCredentials: true }
       );
-      setBlogTitle(response?.data?.searchedBlogs);
+      setBlogResults(response?.data?.searchedBlogs || []);
     } catch (error) {
-      console.log("Error in finding blogs", error);
+      console.error("Error in finding blogs:", error);
+      setBlogResults([]);
     }
-  }
-  function handClick(id) {
-    navigate("/readBlog", { state: { id } });
-  }
+  }, [API_URL, inputSearch]);
+
   useEffect(() => {
     const delay = setTimeout(() => {
-      searchBlog(inputSearch);
+      searchBlog();
     }, 500);
     return () => clearTimeout(delay);
-  }, [inputSearch]);
+  }, [searchBlog]);
 
   return (
     <div className="flex flex-col items-center py-5 w-full">
@@ -39,32 +50,30 @@ const SearchBlog = () => {
         <input
           type="text"
           name="title"
+          value={inputSearch}
           onChange={handleChange}
-          className="w-full py-2 rounded-full bg-[#3B1C32] px-4"
+          className="w-full py-2 rounded-full bg-gradient-to-r from-[#ebebeb] to-[#efafa9] text-black shadow-lg outline-none px-4"
           placeholder="Search Your Blog...."
           onFocus={() => setIsOpen(true)}
-          // onBlur={() => setIsOpen(false)}
+          onBlur={() => setTimeout(() => setIsOpen(false), 200)}
         />
       </div>
-      {isOpen && inputSearch && (
-        <div className="bg-[#3B1C32] border-white border mt-5 w-2/3 px-5 py-5">
-          {blogTitle &&
-            blogTitle.map((item, key) => (
-              <>
-                <div
-                  className="py-1 flex items-center justify-between"
-                  key={key}
-                >
-                  <p>{item?.title}</p>
-                  <p
-                    className="px-4 cursor-pointer rounded-lg bg-blue-500 hover:bg-blue-600 transition-all duration-300"
-                    onClick={() => handClick(item?._id)}
-                  >
-                    Visit
-                  </p>
-                </div>
-              </>
-            ))}
+      {isOpen && blogResults.length > 0 && (
+        <div className="bg-white border-gray-500 shadow-lg border mt-5 w-2/3 px-5 py-5">
+          {blogResults.map((blog) => (
+            <div
+              key={blog._id}
+              className="py-1 flex items-center justify-between"
+            >
+              <p>{blog.title}</p>
+              <button
+                className="px-4 py-1 cursor-pointer rounded-lg bg-blue-500 hover:bg-blue-600 transition-all duration-300"
+                onClick={() => handleClick(blog._id)}
+              >
+                Visit
+              </button>
+            </div>
+          ))}
         </div>
       )}
     </div>

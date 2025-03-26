@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 const RecentBlog = () => {
   const navigate = useNavigate();
   const { recentBlogs } = useGetRecentBlogs();
+
   function handleVisit(id) {
     navigate("/readBlog", { state: { id } });
   }

@@ -4,8 +4,9 @@ import User from "../model/user.model.js";
 
 export const createBlog = async (req, res) => {
   try {
-    const { title, content, categoryId, image } = req.body;
+    const { title, content, categoryId } = req.body;
     const userId = req.user.id;
+    const image = req.file ? req.file.path : "";
 
     if (!title || !content || !categoryId) {
       return res
@@ -13,24 +14,32 @@ export const createBlog = async (req, res) => {
         .json({ message: "Title, content, and category are required" });
     }
 
+    // Validate category
     const category = await Category.findById(categoryId);
     if (!category) {
       return res.status(404).json({ message: "Category not found" });
     }
 
+    // Validate user
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
 
+    // Create new blog
     const newBlog = new Blog({
       title,
       content,
       category: categoryId,
-      image: image || "",
-      user: userId,
+      image,
+      user: userId, // Associate blog with user
       author: user.name,
     });
 
+    // Save blog
     await newBlog.save();
+
+    // Update user model to include the blog
+    user.blogs.push(newBlog._id);
+    await user.save();
 
     res.status(201).json({
       success: true,
@@ -59,7 +68,7 @@ export const getAllBlogs = async (req, res) => {
 export const getBlog = async (req, res) => {
   try {
     const blogId = req.params.id;
-    const blog = await Blog.findById(blogId);
+    const blog = await Blog.findById(blogId).populate("user");
     if (!blog) {
       return res
         .status(404)
@@ -123,7 +132,7 @@ export const deleteBlog = async (req, res) => {
 
 export const getRecentBlogs = async (req, res) => {
   try {
-    const recentBlog = await Blog.find({}).sort({ createdAt: -1 }).limit(5);
+    const recentBlog = await Blog.find({}).sort({ createdAt: -1 }).limit(3);
     return res
       .status(200)
       .json({ success: true, message: "Blog Found Successfully", recentBlog });

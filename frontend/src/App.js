@@ -8,6 +8,8 @@ import Login from "./components/Login";
 import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
 import Home from "./Pages/Home";
+import YourBlogs from "./Pages/YourBlogs";
+
 const App = () => {
   const user = JSON.parse(localStorage.getItem("isAuthenticated"));
   console.log(user);
@@ -19,6 +21,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Authentication />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/yourBlog" element={<YourBlogs />} />
           <Route path="/login" element={<Login />} />
           <Route path="/blog" element={<Blogs />} />
           <Route path="/createBlog" element={<CreateBlog />} />

@@ -1,6 +1,7 @@
 import User from "../model/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { Blog } from "../model/blog.model.js";
 
 export const register = async (req, res) => {
   try {
@@ -84,5 +85,27 @@ export const logout = async (req, res) => {
       .json({ success: true, message: "Logout successful" });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const getUserBlogs = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Check if user exists
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Fetch blogs created by the user and populate related fields
+    const blogs = await Blog.find({ user: userId })
+      .populate("category", "name") // Populate category name
+      .populate("user", "name email") // Populate user details (author)
+      .sort({ createdAt: -1 }); // Sort by newest first
+
+    res.status(200).json({ success: true, blogs });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };
