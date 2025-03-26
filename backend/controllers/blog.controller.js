@@ -1,20 +1,44 @@
 import { Blog } from "../model/blog.model.js";
+import { Category } from "../model/category.model.js";
+import User from "../model/user.model.js";
 
 export const createBlog = async (req, res) => {
   try {
-    const { title, content, author } = req.body;
-    if (!title || !content || !author) {
+    const { title, content, categoryId, image } = req.body;
+    const userId = req.user.id;
+
+    if (!title || !content || !categoryId) {
       return res
         .status(400)
-        .json({ success: false, message: "All fields are required" });
+        .json({ message: "Title, content, and category are required" });
     }
-    const newBlog = new Blog({ title, content, author });
+
+    const category = await Category.findById(categoryId);
+    if (!category) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const newBlog = new Blog({
+      title,
+      content,
+      category: categoryId,
+      image: image || "",
+      user: userId,
+      author: user.name,
+    });
+
     await newBlog.save();
-    return res
-      .status(201)
-      .json({ success: true, message: "Blog created successfully" });
+
+    res.status(201).json({
+      success: true,
+      message: "Blog created successfully",
+      blog: newBlog,
+    });
   } catch (error) {
-    return res.status(500).json({ succes: false, message: error.message });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -133,5 +157,26 @@ export const searchBlog = async (req, res) => {
     return res
       .status(500)
       .json({ succes: false, message: "Error in finding blogs" });
+  }
+};
+
+export const getBlogsByCategory = async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+
+    const blogs = await Blog.find({ category: categoryId })
+      .populate("user", "name")
+      .populate("category", "name")
+      .populate("comments");
+
+    if (!blogs.length) {
+      return res
+        .status(404)
+        .json({ message: "No blogs found in this category" });
+    }
+
+    res.status(200).json({ success: true, blogs });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };

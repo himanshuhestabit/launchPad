@@ -51,8 +51,8 @@ const Register = () => {
     setReadPass(!readPass);
   }
   return (
-    <div className="w-full lg:h-[90vh]">
-      <div className="lg:max-w-[1490px] md:max-w-[800px] max-w-[300px]   mx-auto flex items-center justify-between h-full gap-4 lg:flex-row flex-col">
+    <div className="w-full lg:h-screen">
+      <div className="lg:max-w-[1300px] md:max-w-[800px] max-w-[300px]   mx-auto flex items-center justify-between h-full gap-4 lg:flex-row flex-col">
         <div className="lg:w-2/4 h-full py-16 w-full">
           <div>
             <p className="text-4xl font-black pb-3">
@@ -186,7 +186,7 @@ const Register = () => {
                 Already have an account?{" "}
                 <Link
                   to="/login"
-                  className="font-bold text-blue-500 hover:text-blue-600"
+                  className="font-bold bg-gradient-to-r from-[#007FFF] to-[#6CB4EE] text-transparent bg-clip-text hover:text-blue-600"
                 >
                   Login
                 </Link>
@@ -194,9 +194,9 @@ const Register = () => {
             </div>
           </div>
         </div>
-        <div className="w-2/4 h-full lg:flex items-center justify-center hidden ">
-          <div className="w-[98%] h-[98%] flex items-center justify-center border-animation">
-            <div className="w-[96%] h-[96%] rounded-lg overflow-hidden">
+        <div className="w-2/4 h-[90%] lg:flex items-start justify-center hidden ">
+          <div className="w-[92%] h-[92%] flex items-center justify-center border-animation">
+            <div className="w-[94%] h-[94%] rounded-lg overflow-hidden">
               <img
                 src={imageUrl}
                 alt="register-page-image"

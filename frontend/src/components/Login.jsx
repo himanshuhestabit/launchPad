@@ -33,10 +33,10 @@ const Login = () => {
         withCredentials: true,
       });
       if (response.status === 200) {
-        const { role } = response.data.userExist;
-        dispatch(loginSuccess({ role }));
+        const { role, _id } = response.data.userExist;
+        dispatch(loginSuccess({ role, userId: _id }));
         toast.success("User logged in successfully!");
-        navigate("/blog");
+        navigate("/home");
       }
     } catch (error) {
       toast.error("Failed to login user");
@@ -48,8 +48,8 @@ const Login = () => {
   }
 
   return (
-    <div className="w-full lg:h-[90vh]">
-      <div className="lg:max-w-[1490px] md:max-w-[800px] max-w-[300px]  mx-auto flex items-center justify-between h-full gap-4 lg:flex-row flex-col">
+    <div className="w-full lg:h-screen">
+      <div className="lg:max-w-[1300px] md:max-w-[800px] max-w-[300px]  mx-auto flex items-center justify-between h-full gap-4 lg:flex-row flex-col">
         <div className="lg:w-2/4 w-full  h-full py-16">
           <div>
             <p className="text-4xl font-black pb-3">
@@ -151,9 +151,9 @@ const Login = () => {
             </div>
           </div>
         </div>
-        <div className="w-2/4 h-full lg:flex items-center justify-center hidden">
-          <div className="w-[98%] h-[98%]  flex items-center justify-center border-animation">
-            <div className="w-[96%] h-[96%]  rounded-lg overflow-hidden ">
+        <div className="w-2/4 h-[90%] lg:flex items-start justify-center hidden">
+          <div className="w-[92%] h-[92%]  flex items-center justify-center border-animation">
+            <div className="w-[94%] h-[94%]  rounded-lg overflow-hidden ">
               <img
                 src={imageUrl}
                 alt="login-page-image"

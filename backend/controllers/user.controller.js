@@ -68,7 +68,7 @@ export const login = async (req, res) => {
 
 export const getUser = async (req, res) => {
   try {
-    const id = req.user.id;
+    const { id } = req.params;
     const user = await User.findById(id).select("-password");
     return res.status(200).json({ success: true, user });
   } catch (error) {
