@@ -19,7 +19,7 @@ blogRouter.get("/getBlogsByCategory/:categoryId", getBlogsByCategory);
 blogRouter.get("/getBlog/:id", auth, getBlog);
 blogRouter.post("/createBlog", auth, upload.single("image"), createBlog);
 blogRouter.post("/searchBlog", auth, searchBlog);
-blogRouter.put("/updateBlog/:id", auth, authRole, updateBlog);
+blogRouter.put("/updateBlog/:id", auth, upload.single("image"), updateBlog);
 blogRouter.delete("/deleteBlog/:id", auth, deleteBlog);
 
 export default blogRouter;

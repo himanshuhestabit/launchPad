@@ -3,8 +3,11 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import UpdateBlog from "./UpdateBlog";
 
 const YourAllBlogs = () => {
+  const [showUpdateBlog, setShowUpdateBlog] = useState(false);
+  const [selectedBlogId, setSelectedBlogId] = useState(null);
   const navigate = useNavigate();
   const truncateHtml = (html, length) => {
     const doc = new DOMParser().parseFromString(html, "text/html");
@@ -50,8 +53,11 @@ const YourAllBlogs = () => {
       toast.error("Error in deleting the blog");
     }
   }
+  const handleUpdate = (id) => {
+    setSelectedBlogId(id);
+    setShowUpdateBlog(true);
+  };
 
-  console.log(blogs);
   return (
     <div className="w-full lg:h-screen">
       <div className="lg:max-w-[1300px] md:max-w-[800px] max-w-[300px] mx-auto flex flex-col gap-6 py-8">
@@ -79,7 +85,10 @@ const YourAllBlogs = () => {
                   >
                     Read
                   </button>
-                  <button className="bg-yellow-500 text-white px-4 py-2 rounded-lg">
+                  <button
+                    onClick={() => handleUpdate(blog?._id)}
+                    className="bg-yellow-500 text-white px-4 py-2 rounded-lg"
+                  >
                     Update
                   </button>
                   <button
@@ -103,6 +112,14 @@ const YourAllBlogs = () => {
           <p className="text-center text-gray-500">No blogs found</p>
         )}
       </div>
+      {showUpdateBlog && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">
+          <UpdateBlog
+            id={selectedBlogId}
+            setShowUpdateBlog={setShowUpdateBlog}
+          />
+        </div>
+      )}
     </div>
   );
 };

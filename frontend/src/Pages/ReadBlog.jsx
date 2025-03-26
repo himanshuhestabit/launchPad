@@ -1,19 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import useGetBlogDetails from "../hooks/useGetBlogDetails";
 import RecentBlog from "../components/RecentBlog";
+import axios from "axios";
 
 const ReadBlog = () => {
   const location = useLocation();
   const id = location.state?.id;
   const { blogDetails } = useGetBlogDetails({ id });
   const [comment, setComment] = useState("");
-  const [comments, setComments] = useState(blogDetails?.comments || []);
+  const [comments, setComments] = useState([]);
+  const API_URL = process.env.REACT_APP_API_URL;
 
-  const handleCommentSubmit = () => {
-    if (comment.trim() !== "") {
-      setComments([...comments, { text: comment, author: "Anonymous" }]);
-      setComment("");
+  // Fetch comments for the blog post
+  useEffect(() => {
+    if (id) {
+      fetchComments();
+    }
+  }, [id]);
+
+  const fetchComments = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/api/v1/comment/getCommentsByBlog/${id}`,
+        { withCredentials: true }
+      );
+      console.log(response);
+      if (response.data.success) {
+        setComments(response.data.comments);
+      }
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
+  };
+
+  const handleCommentSubmit = async () => {
+    if (comment.trim() === "") return;
+
+    try {
+      const response = await axios.post(
+        `${API_URL}/api/v1/comment/createComment`,
+        {
+          blogId: id,
+          content: comment,
+        },
+        { withCredentials: true }
+      );
+
+      if (response.data.success) {
+        setComments([...comments, response.data.comment]); // Add new comment
+        setComment(""); // Clear input field
+      }
+    } catch (error) {
+      console.error("Error adding comment:", error);
     }
   };
 
@@ -45,7 +84,6 @@ const ReadBlog = () => {
             dangerouslySetInnerHTML={{ __html: blogDetails?.content }}
             className="text-gray-700 leading-relaxed"
           />
-
           <p className="mt-8 text-right text-gray-400 italic text-lg">
             - {blogDetails?.author}
           </p>
@@ -70,9 +108,14 @@ const ReadBlog = () => {
             {comments.length > 0 ? (
               <div className="space-y-4">
                 {comments.map((c, index) => (
-                  <div key={c._id} className="bg-gray-800 p-4 rounded-lg">
-                    <p className="text-gray-300">{c.text}</p>
-                    <p className="text-gray-400 text-sm italic">- {c.author}</p>
+                  <div
+                    key={c._id || index}
+                    className="bg-gray-800 p-4 rounded-lg"
+                  >
+                    <p className="text-gray-300">{c.content}</p>
+                    <p className="text-gray-400 text-sm italic">
+                      - {c.user?.name || "Anonymous"}
+                    </p>
                   </div>
                 ))}
               </div>

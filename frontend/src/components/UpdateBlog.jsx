@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import useGetBlogDetails from "../hooks/useGetBlogDetails";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -11,34 +11,48 @@ import htmlToDraft from "html-to-draftjs";
 
 const UpdateBlog = ({ id, setShowUpdateBlog }) => {
   const API_URL = process.env.REACT_APP_API_URL;
-  const [isUpdated, setIsUpdated] = useState(false);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [image, setImage] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const isMountedRef = useRef(true);
+
   const {
     register,
     handleSubmit,
     setValue,
     reset,
-    formState: { errors, isSubmitting },
+    watch,
+    formState: { errors },
   } = useForm();
 
-  const { blogDetails } = useGetBlogDetails({ id, isUpdated });
-  console.log(blogDetails);
+  const { blogDetails } = useGetBlogDetails({ id });
+
+  const updateEditorState = useCallback((content) => {
+    if (!content) return;
+    const blocksFromHtml = htmlToDraft(content);
+    const contentState = ContentState.createFromBlockArray(
+      blocksFromHtml.contentBlocks
+    );
+    setEditorState(EditorState.createWithContent(contentState));
+  }, []);
+
   useEffect(() => {
+    isMountedRef.current = true;
+
     if (blogDetails) {
       reset({
-        title: blogDetails.title,
-        author: blogDetails.author,
+        title: blogDetails.title || "",
+        author: blogDetails.author || "",
+        content: blogDetails.content || "",
       });
 
-      const blocksFromHtml = htmlToDraft(blogDetails.content);
-      const contentState = ContentState.createFromBlockArray(
-        blocksFromHtml.contentBlocks
-      );
-      setEditorState(EditorState.createWithContent(contentState));
-      setValue("content", blogDetails.content);
+      updateEditorState(blogDetails.content || "");
     }
-  }, [blogDetails, reset, setValue]);
+
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, [blogDetails, reset, updateEditorState]);
 
   const handleEditorChange = (state) => {
     setEditorState(state);
@@ -47,17 +61,26 @@ const UpdateBlog = ({ id, setShowUpdateBlog }) => {
   };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file);
-    }
+    const file = e.target.files?.[0] || null;
+    setImage(file);
   };
 
-  async function onSubmit(data) {
+  const onSubmit = async (data) => {
+    if (!isMountedRef.current) return;
+
+    setIsSubmitting(true);
+
+    // Merge updated fields with existing values
+    const updatedData = {
+      title: data.title || blogDetails.title,
+      content: data.content || blogDetails.content,
+      author: data.author || blogDetails.author,
+    };
+
     const formData = new FormData();
-    formData.append("title", data.title);
-    formData.append("content", data.content);
-    formData.append("author", data.author);
+    formData.append("title", updatedData.title);
+    formData.append("content", updatedData.content);
+    formData.append("author", updatedData.author);
     if (image) {
       formData.append("image", image);
     }
@@ -71,13 +94,17 @@ const UpdateBlog = ({ id, setShowUpdateBlog }) => {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-      toast.success("Blog updated successfully!");
-      setShowUpdateBlog(false);
-      setIsUpdated(!isUpdated);
+
+      if (isMountedRef.current) {
+        toast.success("Blog updated successfully!");
+        setShowUpdateBlog(false);
+      }
     } catch (error) {
-      toast.error("Failed to update blog.");
+      if (isMountedRef.current) toast.error("Failed to update blog.");
+    } finally {
+      if (isMountedRef.current) setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm">
@@ -89,12 +116,10 @@ const UpdateBlog = ({ id, setShowUpdateBlog }) => {
           <div className="flex flex-col gap-2">
             <label>Blog Title</label>
             <input
-              {...register("title", { required: "Title is required" })}
+              {...register("title")}
+              defaultValue={blogDetails?.title}
               className="bg-[#3B1C32] w-full p-3 rounded-md outline-none focus:ring-2 focus:ring-[#6A1E55]"
             />
-            {errors.title && (
-              <span className="text-red-400">{errors.title.message}</span>
-            )}
           </div>
           <div className="flex flex-col gap-2">
             <label>Blog Content</label>
@@ -107,9 +132,6 @@ const UpdateBlog = ({ id, setShowUpdateBlog }) => {
                 toolbarClassName="editor-toolbar"
               />
             </div>
-            {errors.content && (
-              <span className="text-red-400">{errors.content.message}</span>
-            )}
           </div>
           <div className="flex flex-col gap-2">
             <label>Upload Image</label>
@@ -123,12 +145,10 @@ const UpdateBlog = ({ id, setShowUpdateBlog }) => {
           <div className="flex flex-col gap-2">
             <label>Blog Author</label>
             <input
-              {...register("author", { required: "Author is required" })}
+              {...register("author")}
+              defaultValue={blogDetails?.author}
               className="bg-[#3B1C32] w-full p-3 rounded-md outline-none focus:ring-2 focus:ring-[#6A1E55]"
             />
-            {errors.author && (
-              <span className="text-red-400">{errors.author.message}</span>
-            )}
           </div>
           <div className="flex justify-between mt-4">
             <button

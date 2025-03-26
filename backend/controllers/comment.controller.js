@@ -26,6 +26,9 @@ export const createComment = async (req, res) => {
     blog.comments.push(newComment._id);
     await blog.save();
 
+    // Populate the user field before sending the response
+    await newComment.populate("user", "name profilePic");
+
     res.status(201).json({
       success: true,
       message: "Comment added successfully",

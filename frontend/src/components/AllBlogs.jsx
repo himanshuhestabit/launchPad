@@ -66,7 +66,7 @@ const AllBlogs = () => {
                 onClick={() =>
                   navigate("/readBlog", { state: { id: blog._id } })
                 }
-                className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                className="mt-4 bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
               >
                 Read More
               </button>
@@ -89,8 +89,8 @@ const AllBlogs = () => {
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto py-10">
-        <h2 className="text-4xl sm:text-5xl font-black text-center bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text pb-6">
-          Latest Blogs
+        <h2 className="text-4xl  font-bold text-center bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text pb-6">
+          Read Blogs
         </h2>
 
         {content}
