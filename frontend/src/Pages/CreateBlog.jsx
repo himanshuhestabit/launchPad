@@ -88,7 +88,7 @@ const CreateBlog = () => {
 
   return (
     <div className="w-full min-h-screen flex items-center justify-center bg-white text-black flex-col p-4">
-      <div className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] w-full max-w-3xl p-8 rounded-xl flex flex-col items-center justify-center shadow-lg">
+      <div className="  bg-gradient-to-r from-[#e090f4] to-[#ef786d] w-full max-w-3xl p-8 rounded-xl flex flex-col items-center justify-center shadow-lg">
         <p className="text-3xl font-bold mb-6 text-center">Create Your Blog</p>
         <form
           onSubmit={handleSubmit(onSubmit)}

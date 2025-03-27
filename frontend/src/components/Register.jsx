@@ -56,7 +56,7 @@ const Register = () => {
   return (
     <div className="w-full lg:h-screen flex items-center justify-center">
       <div className="lg:max-w-[1300px] md:max-w-[800px] max-w-[300px] mx-auto flex items-center justify-between h-full gap-4 lg:flex-row flex-col">
-        {/* Left Side Animation (Text) */}
+        {/* Left Section - Text & Form */}
         <motion.div
           initial={{ x: -100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
@@ -114,6 +114,7 @@ const Register = () => {
                   </div>
                 )}
               </div>
+
               <div className="flex flex-col gap-2 w-full">
                 <label className="text-lg font-semibold flex items-center gap-1">
                   <MdEmail />
@@ -135,6 +136,49 @@ const Register = () => {
                   <div className="flex items-center gap-1 text-red-500">
                     <MdError />
                     <p>{errors.email.message}</p>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex flex-col gap-2 w-full">
+                <label className="text-lg font-semibold flex items-center gap-1">
+                  <RiLockPasswordFill />
+                  Password
+                </label>
+                <div className="relative flex items-center w-full">
+                  <input
+                    type={readPass ? "text" : "password"}
+                    {...register("password", {
+                      required: "Password is required",
+                      minLength: {
+                        value: 8,
+                        message: "Password must be at least 8 characters",
+                      },
+                      maxLength: {
+                        value: 16,
+                        message: "Password must be at most 16 characters",
+                      },
+                    })}
+                    className="bg-gray-300 w-full py-3 px-5 pr-12 rounded-full outline-none"
+                    autoComplete="off"
+                    placeholder="Enter Your Password"
+                  />
+                  {readPass ? (
+                    <FaEye
+                      className="absolute right-4 md:right-6 cursor-pointer text-gray-600"
+                      onClick={handleClick}
+                    />
+                  ) : (
+                    <FaEyeSlash
+                      className="absolute right-4 md:right-6 cursor-pointer text-gray-600"
+                      onClick={handleClick}
+                    />
+                  )}
+                </div>
+                {errors.password && (
+                  <div className="flex items-center gap-1 text-red-500">
+                    <MdError />
+                    <p>{errors.password.message}</p>
                   </div>
                 )}
               </div>
@@ -162,7 +206,7 @@ const Register = () => {
           </div>
         </motion.div>
 
-        {/* Right Side Animation (Image) */}
+        {/* Right Section - Image */}
         <motion.div
           initial={{ x: 100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}

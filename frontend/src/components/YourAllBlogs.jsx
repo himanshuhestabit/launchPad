@@ -7,6 +7,10 @@ import { motion } from "framer-motion";
 import UpdateBlog from "./UpdateBlog";
 
 const YourAllBlogs = () => {
+  const truncateHtml = (html, length) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent.slice(0, length) + "...";
+  };
   const [showUpdateBlog, setShowUpdateBlog] = useState(false);
   const [selectedBlogId, setSelectedBlogId] = useState(null);
   const navigate = useNavigate();
@@ -74,7 +78,12 @@ const YourAllBlogs = () => {
                 <h3 className="text-2xl font-bold text-gray-800">
                   {blog.title}
                 </h3>
-                <p className="text-lg mb-4">{blog.content.slice(0, 120)}...</p>
+                <div
+                  className="text-lg mb-4 text-gray-500"
+                  dangerouslySetInnerHTML={{
+                    __html: truncateHtml(blog?.content, 120),
+                  }}
+                />
                 <div className="mt-4 flex gap-4">
                   <button
                     className="bg-gradient-to-r text-white from-[#718eeb] to-[#0521c2] hover:brightness-90 px-4 py-2 rounded-md transition-all duration-200"

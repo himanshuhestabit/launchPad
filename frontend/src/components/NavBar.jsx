@@ -5,6 +5,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { logout } from "../redux/features/authSlice";
 import { FaUserAlt } from "react-icons/fa";
+import { IoCreateOutline } from "react-icons/io5";
+import { BsCollection } from "react-icons/bs";
+import { IoIosLogOut } from "react-icons/io";
+
 const NavBar = () => {
   const [openModal, setOpenModal] = useState(false);
   const [user, setUser] = useState(null);
@@ -97,19 +101,25 @@ const NavBar = () => {
                   className="block px-4 py-2 hover:bg-gray-100 w-full"
                   onClick={handleCreateBlog}
                 >
-                  Create Blog
+                  <p className="flex items-center justify-center gap-1 ">
+                    Create Blog <IoCreateOutline />
+                  </p>
                 </button>
                 <button
                   onClick={handleYourBlog}
                   className="block px-4 py-2 hover:bg-gray-100 w-full"
                 >
-                  Your Blog
+                  <p className="flex items-center justify-center gap-1">
+                    Your Blogs <BsCollection />
+                  </p>
                 </button>
                 <button
                   onClick={handleLogout}
                   className="block w-full px-4 py-2 text-red-500 hover:bg-gray-100 "
                 >
-                  Logout
+                  <p className="flex items-center justify-center gap-1">
+                    Logout <IoIosLogOut />
+                  </p>
                 </button>
               </div>
             </div>
