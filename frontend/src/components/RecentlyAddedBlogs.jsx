@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const RecentlyAddedBlogs = () => {
   const navigate = useNavigate();
@@ -75,14 +76,20 @@ const RecentlyAddedBlogs = () => {
   }
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8 py-10">
+    <motion.div
+      initial={{ opacity: 0, y: 100 }} // Start from bottom with opacity 0
+      whileInView={{ opacity: 1, y: 0 }} // Animate to normal position
+      transition={{ duration: 0.8, ease: "easeOut" }} // Smooth animation
+      viewport={{ once: true }} // Triggers only once
+      className="w-full px-4 sm:px-6 lg:px-8 py-10"
+    >
       <div className="max-w-[1300px] mx-auto">
         <p className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text font-bold text-3xl text-center pb-6">
           Recently Added Blogs
         </p>
         {content}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

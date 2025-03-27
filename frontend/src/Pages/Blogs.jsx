@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchBlogs } from "../redux/features/blogSlice";
 import Pagination from "../components/Pagination";
 import SearchBlog from "../components/SearchBlog";
+import { motion } from "framer-motion";
 
 const Blogs = () => {
   const [showUpdateBlog, setShowUpdateBlog] = useState(false);
@@ -75,13 +76,26 @@ const Blogs = () => {
     content = <p className="text-center text-lg">No blogs available</p>;
   } else {
     content = (
-      <div className="flex flex-col gap-6 w-full">
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        variants={{
+          hidden: { opacity: 0, y: 50 },
+          visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.2 } },
+        }}
+        viewport={{ once: true }}
+        className="flex flex-col gap-6 w-full"
+      >
         {currentBlogs.map((item) => {
           const blogId = item?._id || item?.id;
           const { title, content, author, image } = item;
           return (
-            <div
+            <motion.div
               key={blogId}
+              variants={{
+                hidden: { opacity: 0, y: 50 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+              }}
               className="flex flex-col md:flex-row bg-white p-6 rounded-lg shadow-xl gap-6"
             >
               <div className="flex-1 flex flex-col justify-between">
@@ -96,26 +110,29 @@ const Blogs = () => {
                   <p className="text-sm text-gray-300">Author: {author}</p>
                 </div>
                 <div className="flex flex-col sm:flex-row justify-start mt-4 gap-2">
-                  <button
+                  <motion.button
                     onClick={() => handleRead(blogId)}
-                    className="bg-gradient-to-r text-white from-[#718eeb] to-[#0521c2] hover:brightness-90 px-4 py-2 rounded-md  transition-all duration-200"
+                    whileHover={{ scale: 1.05 }}
+                    className="bg-gradient-to-r text-white from-[#718eeb] to-[#0521c2] hover:brightness-90 px-4 py-2 rounded-md transition-all duration-200"
                   >
                     Read Blog
-                  </button>
+                  </motion.button>
                   {role === "admin" && (
                     <div className="flex flex-col sm:flex-row gap-2">
-                      <button
+                      <motion.button
                         onClick={() => handleUpdate(blogId)}
+                        whileHover={{ scale: 1.05 }}
                         className="bg-gradient-to-r from-yellow-300 to-yellow-500 px-4 py-2 rounded-md hover:brightness-95 transition"
                       >
                         Update
-                      </button>
-                      <button
+                      </motion.button>
+                      <motion.button
                         onClick={() => handleDelete(blogId)}
+                        whileHover={{ scale: 1.05 }}
                         className="bg-gradient-to-r from-red-400 to-red-600 px-4 py-2 rounded-md hover:brightness-95 transition"
                       >
                         Delete
-                      </button>
+                      </motion.button>
                     </div>
                   )}
                 </div>
@@ -127,15 +144,21 @@ const Blogs = () => {
                   className="w-3/4 h-3/4 object-cover rounded-md"
                 />
               </div>
-            </div>
+            </motion.div>
           );
         })}
-      </div>
+      </motion.div>
     );
   }
 
   return (
-    <div className="w-full min-h-screen flex flex-col bg-white text-black gap-5">
+    <motion.div
+      initial={{ opacity: 0, y: 100 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      viewport={{ once: true }}
+      className="w-full min-h-screen flex flex-col bg-white text-black gap-5"
+    >
       <SearchBlog />
       <div className="container mx-auto p-6 min-h-[70vh] flex flex-col items-center justify-center">
         {content}
@@ -149,14 +172,20 @@ const Blogs = () => {
         />
       )}
       {showUpdateBlog && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center"
+        >
           <UpdateBlog
             id={selectedBlogId}
             setShowUpdateBlog={setShowUpdateBlog}
           />
-        </div>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

@@ -3,43 +3,38 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 import UpdateBlog from "./UpdateBlog";
 
 const YourAllBlogs = () => {
   const [showUpdateBlog, setShowUpdateBlog] = useState(false);
   const [selectedBlogId, setSelectedBlogId] = useState(null);
   const navigate = useNavigate();
-  const truncateHtml = (html, length) => {
-    const doc = new DOMParser().parseFromString(html, "text/html");
-    return doc.body.textContent.slice(0, length) + "...";
-  };
   const userId = useSelector((state) => state.auth.userId);
-
   const API_URL = process.env.REACT_APP_API_URL;
   const [blogs, setBlogs] = useState([]);
 
-  async function getAllUserBlogs() {
-    try {
-      const response = await axios.get(
-        `${API_URL}/api/v1/user/getUserBlogs/${userId}`,
-        { withCredentials: true }
-      );
-      setBlogs(response?.data?.blogs || []);
-    } catch (error) {
-      console.error(
-        "Error fetching user blogs:",
-        error.response?.data || error.message
-      );
-    }
-  }
-
-  function handleRead(id) {
-    navigate("/readBlog", { state: { id } });
-  }
   useEffect(() => {
+    async function getAllUserBlogs() {
+      try {
+        const response = await axios.get(
+          `${API_URL}/api/v1/user/getUserBlogs/${userId}`,
+          { withCredentials: true }
+        );
+        setBlogs(response?.data?.blogs || []);
+      } catch (error) {
+        console.error(
+          "Error fetching user blogs:",
+          error.response?.data || error.message
+        );
+      }
+    }
     getAllUserBlogs();
   }, []);
-  async function handleDelete(id) {
+
+  const handleRead = (id) => navigate("/readBlog", { state: { id } });
+
+  const handleDelete = async (id) => {
     try {
       const response = await axios.delete(
         `${API_URL}/api/v1/blogs/deleteBlog/${id}`,
@@ -47,12 +42,13 @@ const YourAllBlogs = () => {
       );
       if (response.status === 200) {
         toast.success("Blog deleted successfully");
-        getAllUserBlogs();
+        setBlogs(blogs.filter((blog) => blog._id !== id));
       }
     } catch (error) {
       toast.error("Error in deleting the blog");
     }
-  }
+  };
+
   const handleUpdate = (id) => {
     setSelectedBlogId(id);
     setShowUpdateBlog(true);
@@ -65,24 +61,23 @@ const YourAllBlogs = () => {
           Your Blogs
         </h2>
         {blogs.length > 0 ? (
-          blogs.map((blog) => (
-            <div
+          blogs.map((blog, index) => (
+            <motion.div
               key={blog._id}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              whileHover={{ scale: 1.02 }}
               className="flex lg:flex-row flex-col items-center bg-gray-100 rounded-lg p-6 shadow-md gap-6"
             >
               <div className="lg:w-3/5 w-full">
                 <h3 className="text-2xl font-bold text-gray-800">
                   {blog.title}
                 </h3>
-                <div
-                  className="text-lg mb-4"
-                  dangerouslySetInnerHTML={{
-                    __html: truncateHtml(blog?.content, 120),
-                  }}
-                />
+                <p className="text-lg mb-4">{blog.content.slice(0, 120)}...</p>
                 <div className="mt-4 flex gap-4">
                   <button
-                    className="bg-gradient-to-r text-white from-[#718eeb] to-[#0521c2] hover:brightness-90 px-4 py-2 rounded-md  transition-all duration-200"
+                    className="bg-gradient-to-r text-white from-[#718eeb] to-[#0521c2] hover:brightness-90 px-4 py-2 rounded-md transition-all duration-200"
                     onClick={() => handleRead(blog?._id)}
                   >
                     Read
@@ -101,14 +96,19 @@ const YourAllBlogs = () => {
                   </button>
                 </div>
               </div>
-              <div className="lg:w-2/5 w-full">
+              <motion.div
+                className="lg:w-2/5 w-full"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.15 }}
+              >
                 <img
                   src={blog.image}
                   alt={blog.title}
                   className="w-full h-48 object-cover rounded-lg"
                 />
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           ))
         ) : (
           <p className="text-center text-gray-500">No blogs found</p>

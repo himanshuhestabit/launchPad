@@ -87,12 +87,25 @@ export const updateComment = async (req, res) => {
 export const deleteComment = async (req, res) => {
   try {
     const { commentId } = req.params;
+
+    // Find the comment
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+
+    // Remove the comment from the blog's comments array
+    await Blog.findByIdAndUpdate(comment.blog, {
+      $pull: { comments: commentId },
+    });
+
+    // Delete the comment
     await Comment.findByIdAndDelete(commentId);
-    return res
+
+    res
       .status(200)
-      .json({ success: true, message: "Comment delted successfully" });
+      .json({ success: true, message: "Comment deleted successfully" });
   } catch (error) {
-    console.error("Error in deleteComment:", error);
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };

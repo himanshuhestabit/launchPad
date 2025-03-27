@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -28,14 +29,22 @@ const HeroSection = () => {
     }
     fetchUserDetails();
   }, [id, API_URL]);
+
   function handleClick() {
     navigate("/blog");
   }
+
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto flex flex-col-reverse lg:flex-row items-center justify-between gap-8 py-10">
-        {/* Left Section */}
-        <div className="w-full lg:w-1/2 text-center lg:text-left">
+        {/* Left Section - Animated from Left to Right */}
+        <motion.div
+          initial={{ opacity: 0, x: -100 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: true }}
+          className="w-full lg:w-1/2 text-center lg:text-left"
+        >
           <p className="text-4xl sm:text-5xl lg:text-6xl font-black pb-3">
             Welcome,{" "}
             <span className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text">
@@ -61,16 +70,22 @@ const HeroSection = () => {
           >
             Explore Blog <FaLongArrowAltRight />
           </button>
-        </div>
+        </motion.div>
 
-        {/* Right Section */}
-        <div className="w-full lg:w-1/2">
+        {/* Right Section - Animated from Right to Left */}
+        <motion.div
+          initial={{ opacity: 0, x: 100 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: true }}
+          className="w-full lg:w-1/2"
+        >
           <img
             src={imageUrl}
             alt="Hero-Image"
             className="w-full h-auto object-cover rounded-md shadow-lg"
           />
-        </div>
+        </motion.div>
       </div>
     </div>
   );
