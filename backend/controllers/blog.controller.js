@@ -160,24 +160,3 @@ export const searchBlog = async (req, res) => {
       .json({ succes: false, message: "Error in finding blogs" });
   }
 };
-
-export const getBlogsByCategory = async (req, res) => {
-  try {
-    const { categoryId } = req.params;
-
-    const blogs = await Blog.find({ category: categoryId })
-      .populate("user", "name")
-      .populate("category", "name")
-      .populate("comments");
-
-    if (!blogs.length) {
-      return res
-        .status(404)
-        .json({ message: "No blogs found in this category" });
-    }
-
-    res.status(200).json({ success: true, blogs });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
