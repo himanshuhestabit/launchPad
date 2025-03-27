@@ -69,100 +69,90 @@ const Blogs = () => {
     if (currentPage > 1) setCurrentPage((prev) => prev - 1);
   };
 
-  let content;
-  if (loading) {
-    content = <p className="text-center text-xl">Loading blogs...</p>;
-  } else if (blogs.length === 0) {
-    content = <p className="text-center text-lg">No blogs available</p>;
-  } else {
-    content = (
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        variants={{
-          hidden: { opacity: 0, y: 50 },
-          visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.2 } },
-        }}
-        viewport={{ once: true }}
-        className="flex flex-col gap-6 w-full"
-      >
-        {currentBlogs.map((item) => {
-          const blogId = item?._id || item?.id;
-          const { title, content, author, image } = item;
-          return (
-            <motion.div
-              key={blogId}
-              variants={{
-                hidden: { opacity: 0, y: 50 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-              }}
-              className="flex flex-col md:flex-row bg-white p-6 rounded-lg shadow-xl gap-6"
-            >
-              <div className="flex-1 flex flex-col justify-between">
-                <div>
-                  <h2 className="text-2xl font-bold mb-2">{title}</h2>
-                  <div
-                    className="text-lg mb-4"
-                    dangerouslySetInnerHTML={{
-                      __html: truncateHtml(content, 120),
-                    }}
-                  />
-                  <p className="text-sm text-gray-300">Author: {author}</p>
-                </div>
-                <div className="flex flex-col sm:flex-row justify-start mt-4 gap-2">
-                  <motion.button
-                    onClick={() => handleRead(blogId)}
-                    whileHover={{ scale: 1.05 }}
-                    className="bg-gradient-to-r text-white from-[#718eeb] to-[#0521c2] hover:brightness-90 px-4 py-2 rounded-md transition-all duration-200"
-                  >
-                    Read Blog
-                  </motion.button>
-                  {role === "admin" && (
-                    <div className="flex flex-col sm:flex-row gap-2">
-                      <motion.button
-                        onClick={() => handleUpdate(blogId)}
-                        whileHover={{ scale: 1.05 }}
-                        className="bg-gradient-to-r from-yellow-300 to-yellow-500 px-4 py-2 rounded-md hover:brightness-95 transition"
-                      >
-                        Update
-                      </motion.button>
-                      <motion.button
-                        onClick={() => handleDelete(blogId)}
-                        whileHover={{ scale: 1.05 }}
-                        className="bg-gradient-to-r from-red-400 to-red-600 px-4 py-2 rounded-md hover:brightness-95 transition"
-                      >
-                        Delete
-                      </motion.button>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="w-full md:w-1/3 h-48 md:h-auto">
-                <img
-                  src={image}
-                  alt={title}
-                  className="w-3/4 h-3/4 object-cover rounded-md"
-                />
-              </div>
-            </motion.div>
-          );
-        })}
-      </motion.div>
-    );
-  }
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 100 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      viewport={{ once: true }}
       className="w-full min-h-screen flex flex-col bg-white text-black gap-5"
     >
       <SearchBlog />
       <div className="container mx-auto p-6 min-h-[70vh] flex flex-col items-center justify-center">
-        {content}
+        {loading ? (
+          <p className="text-center text-xl">Loading blogs...</p>
+        ) : blogs.length === 0 ? (
+          <p className="text-center text-lg">No blogs available</p>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col gap-6 w-full"
+          >
+            {currentBlogs.map((item) => {
+              const blogId = item?._id || item?.id;
+              const { title, content, author, image } = item;
+              return (
+                <motion.div
+                  key={blogId}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="flex flex-col md:flex-row bg-white p-6 rounded-lg shadow-xl gap-6"
+                >
+                  <div className="flex-1 flex flex-col justify-between">
+                    <div>
+                      <h2 className="text-2xl font-bold mb-2">{title}</h2>
+                      <div
+                        className="text-lg mb-4"
+                        dangerouslySetInnerHTML={{
+                          __html: truncateHtml(content, 120),
+                        }}
+                      />
+                      <p className="text-sm text-gray-300">Author: {author}</p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row justify-start mt-4 gap-2">
+                      <motion.button
+                        onClick={() => handleRead(blogId)}
+                        whileHover={{ scale: 1.05 }}
+                        className="bg-gradient-to-r text-white from-[#718eeb] to-[#0521c2] hover:brightness-90 px-4 py-2 rounded-md transition-all duration-200"
+                      >
+                        Read Blog
+                      </motion.button>
+                      {role === "admin" && (
+                        <div className="flex flex-col sm:flex-row gap-2">
+                          <motion.button
+                            onClick={() => handleUpdate(blogId)}
+                            whileHover={{ scale: 1.05 }}
+                            className="bg-gradient-to-r from-yellow-300 to-yellow-500 px-4 py-2 rounded-md hover:brightness-95 transition"
+                          >
+                            Update
+                          </motion.button>
+                          <motion.button
+                            onClick={() => handleDelete(blogId)}
+                            whileHover={{ scale: 1.05 }}
+                            className="bg-gradient-to-r from-red-400 to-red-600 px-4 py-2 rounded-md hover:brightness-95 transition"
+                          >
+                            Delete
+                          </motion.button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="w-full md:w-1/3 h-48 md:h-auto">
+                    <img
+                      src={image}
+                      alt={title}
+                      className="w-3/4 h-3/4 object-cover rounded-md"
+                    />
+                  </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        )}
       </div>
+
       {blogs.length > 0 && (
         <Pagination
           currentPage={currentPage}
@@ -171,6 +161,7 @@ const Blogs = () => {
           prevPage={prevPage}
         />
       )}
+
       {showUpdateBlog && (
         <motion.div
           initial={{ opacity: 0 }}
