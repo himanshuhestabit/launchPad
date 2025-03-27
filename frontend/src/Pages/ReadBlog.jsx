@@ -6,26 +6,45 @@ import axios from "axios";
 
 const ReadBlog = () => {
   const location = useLocation();
-  const id = location.state?.id;
-  const { blogDetails } = useGetBlogDetails({ id });
+  const blogId = location.state?.id;
+  const { blogDetails } = useGetBlogDetails({ id: blogId });
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
+  const [user, setUser] = useState(null); // Store logged-in user info
   const API_URL = process.env.REACT_APP_API_URL;
+
+  // Fetch logged-in user info
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/v1/user/me`, {
+          withCredentials: true,
+        });
+        console.log("User Response:", response.data);
+        if (response.data.success) {
+          setUser(response.data.user);
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   // Fetch comments for the blog post
   useEffect(() => {
-    if (id) {
+    if (blogId) {
       fetchComments();
     }
-  }, [id]);
+  }, [blogId]);
 
   const fetchComments = async () => {
     try {
       const response = await axios.get(
-        `${API_URL}/api/v1/comment/getCommentsByBlog/${id}`,
+        `${API_URL}/api/v1/comment/getCommentsByBlog/${blogId}`,
         { withCredentials: true }
       );
-      console.log(response);
       if (response.data.success) {
         setComments(response.data.comments);
       }
@@ -40,10 +59,7 @@ const ReadBlog = () => {
     try {
       const response = await axios.post(
         `${API_URL}/api/v1/comment/createComment`,
-        {
-          blogId: id,
-          content: comment,
-        },
+        { blogId, content: comment },
         { withCredentials: true }
       );
 
@@ -53,6 +69,28 @@ const ReadBlog = () => {
       }
     } catch (error) {
       console.error("Error adding comment:", error);
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      const response = await axios.delete(
+        `${API_URL}/api/v1/comment/deleteComment/${commentId}`,
+        { withCredentials: true }
+      );
+
+      console.log("Delete Response:", response.data);
+
+      if (response.data.success) {
+        // Remove comment from UI instantly
+        setComments((prevComments) =>
+          prevComments.filter((comment) => comment._id !== commentId)
+        );
+      } else {
+        console.error("Failed to delete comment:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Error deleting comment:", error);
     }
   };
 
@@ -82,7 +120,7 @@ const ReadBlog = () => {
           </p>
           <div
             dangerouslySetInnerHTML={{ __html: blogDetails?.content }}
-            className="text-gray-700 leading-relaxed"
+            className="text-gray-700 leading-relaxed prose prose-lg"
           />
           <p className="mt-8 text-right text-gray-400 italic text-lg">
             - {blogDetails?.author}
@@ -107,15 +145,26 @@ const ReadBlog = () => {
             </div>
             {comments.length > 0 ? (
               <div className="space-y-4">
-                {comments.map((c, index) => (
+                {comments.map((c) => (
                   <div
-                    key={c._id || index}
-                    className="bg-gray-800 p-4 rounded-lg"
+                    key={c._id}
+                    className="bg-gray-800 p-4 rounded-lg flex justify-between items-center"
                   >
-                    <p className="text-gray-300">{c.content}</p>
-                    <p className="text-gray-400 text-sm italic">
-                      - {c.user?.name || "Anonymous"}
-                    </p>
+                    <div>
+                      <p className="text-gray-300">{c.content}</p>
+                      <p className="text-gray-400 text-sm italic">
+                        - {c.user?.name || "Anonymous"}
+                      </p>
+                    </div>
+                    {user &&
+                      (user._id === c.user?._id || user.role === "admin") && (
+                        <button
+                          onClick={() => handleDeleteComment(c._id)}
+                          className="text-red-500 text-sm hover:underline"
+                        >
+                          Delete
+                        </button>
+                      )}
                   </div>
                 ))}
               </div>

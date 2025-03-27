@@ -52,7 +52,14 @@ const NavBar = () => {
   function handleLogin() {
     navigate("/login");
   }
-
+  function handleYourBlog() {
+    navigate("/yourBlog");
+    setOpenModal(false);
+  }
+  function handleCreateBlog() {
+    navigate("/createBlog");
+    setOpenModal(false);
+  }
   return (
     <nav className="py-2 bg-white text-black shadow-md">
       <div className="lg:max-w-[1300px] md:max-w-[800px] max-w-[300px] mx-auto flex justify-between items-center">
@@ -86,21 +93,21 @@ const NavBar = () => {
                   openModal ? "block" : "hidden"
                 }`}
               >
-                <Link
-                  to="/createBlog"
-                  className="block px-4 py-2 hover:bg-gray-100"
+                <button
+                  className="block px-4 py-2 hover:bg-gray-100 w-full"
+                  onClick={handleCreateBlog}
                 >
                   Create Blog
-                </Link>
-                <Link
-                  to="/yourBlog"
-                  className="block px-4 py-2 hover:bg-gray-100"
+                </button>
+                <button
+                  onClick={handleYourBlog}
+                  className="block px-4 py-2 hover:bg-gray-100 w-full"
                 >
                   Your Blog
-                </Link>
+                </button>
                 <button
                   onClick={handleLogout}
-                  className="block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100"
+                  className="block w-full px-4 py-2 text-red-500 hover:bg-gray-100 "
                 >
                   Logout
                 </button>

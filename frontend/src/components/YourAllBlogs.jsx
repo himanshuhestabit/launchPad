@@ -82,19 +82,19 @@ const YourAllBlogs = () => {
                 />
                 <div className="mt-4 flex gap-4">
                   <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+                    className="bg-gradient-to-r text-white from-[#718eeb] to-[#0521c2] hover:brightness-90 px-4 py-2 rounded-md  transition-all duration-200"
                     onClick={() => handleRead(blog?._id)}
                   >
                     Read
                   </button>
                   <button
                     onClick={() => handleUpdate(blog?._id)}
-                    className="bg-yellow-500 text-white px-4 py-2 rounded-lg"
+                    className="bg-gradient-to-r from-yellow-300 to-yellow-500 px-4 py-2 rounded-md hover:brightness-95 transition"
                   >
                     Update
                   </button>
                   <button
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg"
+                    className="bg-gradient-to-r from-red-400 to-red-600 px-4 py-2 rounded-md hover:brightness-95 transition"
                     onClick={() => handleDelete(blog?._id)}
                   >
                     Delete

@@ -106,13 +106,13 @@ const Blogs = () => {
                     <div className="flex flex-col sm:flex-row gap-2">
                       <button
                         onClick={() => handleUpdate(blogId)}
-                        className="bg-yellow-600 px-4 py-2 rounded-md hover:bg-yellow-700 transition"
+                        className="bg-gradient-to-r from-yellow-300 to-yellow-500 px-4 py-2 rounded-md hover:brightness-95 transition"
                       >
                         Update
                       </button>
                       <button
                         onClick={() => handleDelete(blogId)}
-                        className="bg-red-600 px-4 py-2 rounded-md hover:bg-red-700 transition"
+                        className="bg-gradient-to-r from-red-400 to-red-600 px-4 py-2 rounded-md hover:brightness-95 transition"
                       >
                         Delete
                       </button>

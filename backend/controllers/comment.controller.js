@@ -87,32 +87,12 @@ export const updateComment = async (req, res) => {
 export const deleteComment = async (req, res) => {
   try {
     const { commentId } = req.params;
-    const userId = req.user.id;
-
-    // Find comment
-    const comment = await Comment.findById(commentId);
-    if (!comment) return res.status(404).json({ message: "Comment not found" });
-
-    // Ensure only the author or admin can delete it
-    if (comment.user.toString() !== userId && req.user.role !== "admin") {
-      return res
-        .status(403)
-        .json({ message: "Unauthorized to delete this comment" });
-    }
-
-    // Remove comment from blog's comments list
-    await Blog.updateOne(
-      { _id: comment.blog },
-      { $pull: { comments: commentId } }
-    );
-
-    // Delete the comment
-    await comment.deleteOne();
-
-    res
+    await Comment.findByIdAndDelete(commentId);
+    return res
       .status(200)
-      .json({ success: true, message: "Comment deleted successfully" });
+      .json({ success: true, message: "Comment delted successfully" });
   } catch (error) {
+    console.error("Error in deleteComment:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

@@ -7,5 +7,6 @@ import {
 const commentRouter = express.Router();
 commentRouter.post("/createComment", auth, createComment);
 commentRouter.get("/getCommentsByBlog/:blogId", auth, getCommentsByBlog);
+commentRouter.delete("/deleteComment/:commentId", auth, getCommentsByBlog);
 
 export default commentRouter;
