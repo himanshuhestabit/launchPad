@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { logout } from "../redux/features/authSlice";
 import { FaUserAlt } from "react-icons/fa";
@@ -64,15 +64,19 @@ const NavBar = () => {
     navigate("/createBlog");
     setOpenModal(false);
   }
+  function handleHome() {
+    navigate("/home");
+    setOpenModal(false);
+  }
   return (
     <nav className="py-2 bg-white text-black shadow-md">
       <div className="lg:max-w-[1300px] md:max-w-[800px] max-w-[300px] mx-auto flex justify-between items-center">
-        <Link
+        <button
           className="text-3xl font-black bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text"
-          to="/home"
+          onClick={handleHome}
         >
           Blogs
-        </Link>
+        </button>
 
         <div className="flex space-x-6 items-center">
           {isAuthenticated ? (
