@@ -8,6 +8,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../redux/features/authSlice";
+import { motion } from "framer-motion";
 
 const Login = () => {
   const [readPass, setReadPass] = useState(false);
@@ -22,11 +23,13 @@ const Login = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
+
   useEffect(() => {
     if (user) {
       navigate("/home");
     }
   }, []);
+
   async function onSubmit(data) {
     try {
       const response = await axios.post(`${API_URL}/api/v1/user/login`, data, {
@@ -47,10 +50,27 @@ const Login = () => {
     setReadPass(!readPass);
   }
 
+  // Animation Variants
+  const slideLeft = {
+    hidden: { x: -100, opacity: 0 },
+    visible: { x: 0, opacity: 1, transition: { duration: 0.8 } },
+  };
+
+  const slideRight = {
+    hidden: { x: 100, opacity: 0 },
+    visible: { x: 0, opacity: 1, transition: { duration: 0.8 } },
+  };
+
   return (
     <div className="w-full lg:h-screen">
-      <div className="lg:max-w-[1300px] md:max-w-[800px] max-w-[300px]  mx-auto flex items-center justify-between h-full gap-4 lg:flex-row flex-col">
-        <div className="lg:w-2/4 w-full  h-full py-16">
+      <div className="lg:max-w-[1300px] md:max-w-[800px] max-w-[300px] mx-auto flex items-center justify-between h-full gap-4 lg:flex-row flex-col">
+        {/* Left Side (Form) - Sliding from Left */}
+        <motion.div
+          className="lg:w-2/4 w-full h-full py-16"
+          initial="hidden"
+          animate="visible"
+          variants={slideLeft}
+        >
           <div>
             <p className="text-4xl font-black pb-3">
               Welcome to{" "}
@@ -65,6 +85,7 @@ const Login = () => {
               accusamus soluta quidem ex.
             </p>
           </div>
+
           <div className="pt-12">
             <form
               onSubmit={handleSubmit(onSubmit)}
@@ -91,6 +112,7 @@ const Login = () => {
                   </div>
                 )}
               </div>
+
               <div className="flex flex-col gap-2 w-full">
                 <label
                   htmlFor="password"
@@ -121,7 +143,6 @@ const Login = () => {
                     />
                   )}
                 </div>
-
                 {errors.password && (
                   <div className="flex items-center gap-1 text-red-500">
                     <MdError />
@@ -129,6 +150,7 @@ const Login = () => {
                   </div>
                 )}
               </div>
+
               <div>
                 <input
                   className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white px-6 py-2 rounded-lg transition-all duration-300 hover:brightness-90 cursor-pointer"
@@ -138,30 +160,38 @@ const Login = () => {
                 />
               </div>
             </form>
+
             <div className="pt-6">
               <p className="text-lg">
                 New User? Please{" "}
                 <Link
                   to={"/"}
-                  className="font-bold bg-gradient-to-r from-[#007FFF] to-[#6CB4EE] text-transparent bg-clip-text hover:text-blue-600 "
+                  className="font-bold bg-gradient-to-r from-[#007FFF] to-[#6CB4EE] text-transparent bg-clip-text hover:text-blue-600"
                 >
                   Register
                 </Link>
               </p>
             </div>
           </div>
-        </div>
-        <div className="w-2/4 h-[90%] lg:flex items-start justify-center hidden">
-          <div className="w-[92%] h-[92%]  flex items-center justify-center border-animation">
-            <div className="w-[94%] h-[94%]  rounded-lg overflow-hidden ">
+        </motion.div>
+
+        {/* Right Side (Image) - Sliding from Right */}
+        <motion.div
+          className="w-2/4 h-[90%] lg:flex items-start justify-center hidden"
+          initial="hidden"
+          animate="visible"
+          variants={slideRight}
+        >
+          <div className="w-[92%] h-[92%] flex items-center justify-center border-animation">
+            <div className="w-[94%] h-[94%] rounded-lg overflow-hidden">
               <img
                 src={imageUrl}
                 alt="login-page-image"
-                className="w-full h-full object-cover "
+                className="w-full h-full object-cover"
               />
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

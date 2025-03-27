@@ -77,7 +77,7 @@ const AllBlogs = () => {
                 onClick={() =>
                   navigate("/readBlog", { state: { id: blog._id } })
                 }
-                className="mt-4 bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                className="mt-4 bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white px-4 py-2 rounded-md hover:brightness-95 transition"
               >
                 Read More
               </button>

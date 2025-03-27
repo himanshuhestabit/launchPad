@@ -6,12 +6,13 @@ import { useForm } from "react-hook-form";
 import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
 const Register = () => {
   const [readPass, setReadPass] = useState(false);
   const user = JSON.parse(localStorage.getItem("isAuthenticated"));
   const imageUrl =
-    "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+    "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fA%3D%3D";
   const API_URL = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
 
@@ -47,13 +48,21 @@ const Register = () => {
       toast.error(error.response?.data?.message || "Failed to register user");
     }
   }
+
   function handleClick() {
     setReadPass(!readPass);
   }
+
   return (
-    <div className="w-full lg:h-screen">
-      <div className="lg:max-w-[1300px] md:max-w-[800px] max-w-[300px]   mx-auto flex items-center justify-between h-full gap-4 lg:flex-row flex-col">
-        <div className="lg:w-2/4 h-full py-16 w-full">
+    <div className="w-full lg:h-screen flex items-center justify-center">
+      <div className="lg:max-w-[1300px] md:max-w-[800px] max-w-[300px] mx-auto flex items-center justify-between h-full gap-4 lg:flex-row flex-col">
+        {/* Left Side Animation (Text) */}
+        <motion.div
+          initial={{ x: -100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="lg:w-2/4 h-full py-16 w-full"
+        >
           <div>
             <p className="text-4xl font-black pb-3">
               Welcome to{" "}
@@ -87,11 +96,11 @@ const Register = () => {
                     },
                     minLength: {
                       value: 2,
-                      message: "Name must contain 2 character",
+                      message: "Name must contain 2 characters",
                     },
                     maxLength: {
                       value: 16,
-                      message: "Name must be less than 16 character",
+                      message: "Name must be less than 16 characters",
                     },
                   })}
                   className="bg-gray-300 w-full py-3 px-5 rounded-full outline-none"
@@ -129,49 +138,7 @@ const Register = () => {
                   </div>
                 )}
               </div>
-              <div className="flex flex-col gap-2 w-full">
-                <label className="text-lg font-semibold flex items-center gap-1">
-                  <RiLockPasswordFill />
-                  Password
-                </label>
-                <div className="relative flex items-center w-full">
-                  <input
-                    type={readPass ? "text" : "password"}
-                    {...register("password", {
-                      required: "Password is required",
-                      minLength: {
-                        value: 8,
-                        message: "Password must be at least 8 characters",
-                      },
-                      maxLength: {
-                        value: 16,
-                        message: "Password must be at most 16 characters",
-                      },
-                    })}
-                    className="bg-gray-300 w-full py-3 px-5 pr-12 rounded-full outline-none"
-                    autoComplete="off"
-                    placeholder="Enter Your Password"
-                  />
-                  {readPass ? (
-                    <FaEye
-                      className="absolute right-4 md:right-6 cursor-pointer text-gray-600"
-                      onClick={handleClick}
-                    />
-                  ) : (
-                    <FaEyeSlash
-                      className="absolute right-4 md:right-6 cursor-pointer text-gray-600"
-                      onClick={handleClick}
-                    />
-                  )}
-                </div>
 
-                {errors.password && (
-                  <div className="flex items-center gap-1 text-red-500">
-                    <MdError />
-                    <p>{errors.password.message}</p>
-                  </div>
-                )}
-              </div>
               <div>
                 <input
                   className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white px-6 py-2 rounded-lg transition-all duration-300 hover:brightness-90 cursor-pointer"
@@ -193,8 +160,15 @@ const Register = () => {
               </p>
             </div>
           </div>
-        </div>
-        <div className="w-2/4 h-[90%] lg:flex items-start justify-center hidden ">
+        </motion.div>
+
+        {/* Right Side Animation (Image) */}
+        <motion.div
+          initial={{ x: 100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="w-2/4 h-[90%] lg:flex items-start justify-center hidden"
+        >
           <div className="w-[92%] h-[92%] flex items-center justify-center border-animation">
             <div className="w-[94%] h-[94%] rounded-lg overflow-hidden">
               <img
@@ -204,7 +178,7 @@ const Register = () => {
               />
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
