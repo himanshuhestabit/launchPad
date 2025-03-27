@@ -10,7 +10,6 @@ import {
   getBlogsByCategory,
 } from "../controllers/blog.controller.js";
 import { auth } from "../middleware/auth.middleware.js";
-import { authRole } from "../middleware/role.middleware.js";
 import upload from "../middleware/upload.middleware.js";
 const blogRouter = express.Router();
 blogRouter.get("/getAllBlogs", auth, getAllBlogs);
