@@ -1,23 +1,16 @@
 import { Blog } from "../model/blog.model.js";
-import { Category } from "../model/category.model.js";
 import User from "../model/user.model.js";
 
 export const createBlog = async (req, res) => {
   try {
-    const { title, content, categoryId } = req.body;
+    const { title, content } = req.body;
     const userId = req.user.id;
     const image = req.file ? req.file.path : "";
 
-    if (!title || !content || !categoryId) {
+    if (!title || !content) {
       return res
         .status(400)
         .json({ message: "Title, content, and category are required" });
-    }
-
-    // Validate category
-    const category = await Category.findById(categoryId);
-    if (!category) {
-      return res.status(404).json({ message: "Category not found" });
     }
 
     // Validate user
@@ -28,7 +21,6 @@ export const createBlog = async (req, res) => {
     const newBlog = new Blog({
       title,
       content,
-      category: categoryId,
       image,
       user: userId, // Associate blog with user
       author: user.name,

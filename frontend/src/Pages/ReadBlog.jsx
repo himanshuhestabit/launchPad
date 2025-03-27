@@ -66,7 +66,7 @@ const ReadBlog = () => {
           <div className="flex justify-between items-center text-gray-500 text-sm mb-4">
             <p>
               By{" "}
-              <span className="text-white font-bold">
+              <span className="text-black font-bold">
                 {blogDetails?.user?.name || "Unknown"}
               </span>
             </p>

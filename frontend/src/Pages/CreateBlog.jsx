@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -16,7 +16,7 @@ const CreateBlog = () => {
     if (!user) {
       navigate("/login");
     }
-  }, []);
+  }, [user, navigate]);
 
   const {
     register,
@@ -24,8 +24,12 @@ const CreateBlog = () => {
     setValue,
     formState: { errors, isSubmitting },
   } = useForm();
+
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+
+  const API_URL = process.env.REACT_APP_API_URL;
 
   // Convert editor content to HTML and update form state
   const handleEditorChange = (state) => {
@@ -34,15 +38,22 @@ const CreateBlog = () => {
     setValue("content", contentHTML);
   };
 
-  const API_URL = process.env.REACT_APP_API_URL;
-
-  // Handle Image Upload
-  const handleImageChange = (e) => {
+  // Handle Image Upload with Preview
+  const handleImageChange = useCallback((e) => {
     const file = e.target.files[0];
     if (file) {
       setImage(file);
+      const imageUrl = URL.createObjectURL(file);
+      setImagePreview(imageUrl);
     }
-  };
+  }, []);
+
+  // Cleanup object URL on unmount
+  useEffect(() => {
+    return () => {
+      if (imagePreview) URL.revokeObjectURL(imagePreview);
+    };
+  }, [imagePreview]);
 
   const onSubmit = async (data) => {
     const formData = new FormData();
@@ -52,7 +63,7 @@ const CreateBlog = () => {
     formData.append("categoryId", "67e2ad02b1457b94d13fd9bb"); // Replace with actual categoryId
 
     if (image) {
-      formData.append("image", image); // Append image file
+      formData.append("image", image);
     }
 
     try {
@@ -74,9 +85,7 @@ const CreateBlog = () => {
       toast.error("Error In Creating Blog");
     }
   };
-  function handleCancle() {
-    navigate("/home");
-  }
+
   return (
     <div className="w-full min-h-screen flex items-center justify-center bg-white text-black flex-col p-4">
       <div className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] w-full max-w-3xl p-8 rounded-xl flex flex-col items-center justify-center shadow-lg">
@@ -103,15 +112,15 @@ const CreateBlog = () => {
             )}
           </div>
 
-          {/* ✅ Fixed: React Draft WYSIWYG Editor */}
+          {/* Content Editor (Scrollable) */}
           <div className="flex flex-col gap-2 w-full">
             <label htmlFor="content">Enter Content</label>
-            <div className="bg-[#1A1A1D] text-white w-full p-3 rounded-md border border-gray-500">
+            <div className="bg-[#1A1A1D] text-white w-full p-3 rounded-md border border-gray-500 max-h-[300px] overflow-y-auto">
               <Editor
                 editorState={editorState}
                 onEditorStateChange={handleEditorChange}
                 wrapperClassName="editor-wrapper"
-                editorClassName="editor-content"
+                editorClassName="editor-content min-h-[200px]"
                 toolbarClassName="editor-toolbar"
               />
             </div>
@@ -120,7 +129,7 @@ const CreateBlog = () => {
             )}
           </div>
 
-          {/* Image Upload */}
+          {/* Image Upload with Preview */}
           <div className="flex flex-col gap-2 w-full">
             <label htmlFor="image">Upload Image</label>
             <input
@@ -129,6 +138,13 @@ const CreateBlog = () => {
               onChange={handleImageChange}
               className="bg-[#1A1A1D] text-white w-full p-3 rounded-md border border-gray-500 cursor-pointer"
             />
+            {imagePreview && (
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="mt-2 w-full h-48 object-cover rounded-md"
+              />
+            )}
           </div>
 
           {/* Author Input */}
@@ -159,12 +175,15 @@ const CreateBlog = () => {
               disabled={isSubmitting}
             />
           </div>
+
+          {/* Cancel Button */}
           <div>
             <button
-              onClick={handleCancle}
+              type="button"
+              onClick={() => navigate("/home")}
               className="bg-gradient-to-r from-[#e8666a] to-[#a1031e] text-white px-6 py-2 rounded-md cursor-pointer hover:bg-[#8A2D70] transition-all duration-300 w-full"
             >
-              Cancle
+              Cancel
             </button>
           </div>
         </form>

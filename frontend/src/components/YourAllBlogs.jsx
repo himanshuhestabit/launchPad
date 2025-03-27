@@ -59,7 +59,7 @@ const YourAllBlogs = () => {
   };
 
   return (
-    <div className="w-full lg:h-screen">
+    <div className="w-full lg:min-h-screen">
       <div className="lg:max-w-[1300px] md:max-w-[800px] max-w-[300px] mx-auto flex flex-col gap-6 py-8">
         <h2 className="text-4xl font-black pb-3 text-center bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text">
           Your Blogs

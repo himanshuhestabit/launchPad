@@ -43,7 +43,7 @@ const RecentlyAddedBlogs = () => {
         {recentBlogs.map(({ _id, image, title, author, content }) => (
           <div
             key={_id}
-            className="w-full p-4 bg-white shadow-lg rounded-lg flex flex-col"
+            className="w-full p-4 bg-white shadow-lg rounded-lg flex flex-col items-center justify-center"
           >
             <img
               src={image}
