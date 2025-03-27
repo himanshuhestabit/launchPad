@@ -8,6 +8,7 @@ import userRouter from "./routes/user.routes.js";
 import commentRouter from "./routes/comment.routes.js";
 import ExpressMongoSanitize from "express-mongo-sanitize";
 import helmet from "helmet";
+import categoryRouter from "./routes/category.routes.js";
 configDotenv();
 connectDatabase();
 const app = express();
@@ -24,6 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/v1/blogs", blogRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/comment", commentRouter);
+app.use("/api/v1/category", categoryRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World");

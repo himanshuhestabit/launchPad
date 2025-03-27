@@ -88,7 +88,7 @@ const CreateBlog = () => {
 
   return (
     <div className="w-full min-h-screen flex items-center justify-center bg-white text-black flex-col p-4">
-      <div className="  bg-gradient-to-r from-[#e090f4] to-[#ef786d] w-full max-w-3xl p-8 rounded-xl flex flex-col items-center justify-center shadow-lg">
+      <div className="  bg-white w-full max-w-3xl p-8 rounded-xl flex flex-col items-center justify-center shadow-lg">
         <p className="text-3xl font-bold mb-6 text-center">Create Your Blog</p>
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -98,7 +98,7 @@ const CreateBlog = () => {
           <div className="flex flex-col gap-2 w-full">
             <label htmlFor="title">Enter Title</label>
             <input
-              className="bg-[#1A1A1D] text-white w-full p-3 rounded-md border border-gray-500 focus:outline-none focus:border-purple-400"
+              className="bg-white text-black w-full p-3 rounded-md border border-gray-500 focus:outline-none focus:border-purple-400"
               {...register("title", {
                 required: "Title is required",
                 minLength: {
@@ -115,8 +115,9 @@ const CreateBlog = () => {
           {/* Content Editor (Scrollable) */}
           <div className="flex flex-col gap-2 w-full">
             <label htmlFor="content">Enter Content</label>
-            <div className="bg-[#1A1A1D] text-white w-full p-3 rounded-md border border-gray-500 max-h-[300px] overflow-y-auto">
+            <div className="bg-white text-black w-full p-3 rounded-md border border-gray-500 max-h-[300px] overflow-y-auto">
               <Editor
+                className="bg-white text-black"
                 editorState={editorState}
                 onEditorStateChange={handleEditorChange}
                 wrapperClassName="editor-wrapper"
@@ -136,7 +137,7 @@ const CreateBlog = () => {
               type="file"
               accept="image/*"
               onChange={handleImageChange}
-              className="bg-[#1A1A1D] text-white w-full p-3 rounded-md border border-gray-500 cursor-pointer"
+              className="bg-white text-black w-full p-3 rounded-md border border-gray-500 cursor-pointer"
             />
             {imagePreview && (
               <img
@@ -152,7 +153,7 @@ const CreateBlog = () => {
             <label htmlFor="author">Enter Author</label>
             <input
               autoComplete="off"
-              className="bg-[#1A1A1D] text-white w-full p-3 rounded-md border border-gray-500 focus:outline-none focus:border-purple-400"
+              className="bg-white text-black w-full p-3 rounded-md border border-gray-500 focus:outline-none focus:border-purple-400"
               {...register("author", {
                 required: "Author is required",
                 minLength: {

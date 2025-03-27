@@ -8,7 +8,7 @@ import { FaUserAlt } from "react-icons/fa";
 import { IoCreateOutline } from "react-icons/io5";
 import { BsCollection } from "react-icons/bs";
 import { IoIosLogOut } from "react-icons/io";
-
+import { CiSquarePlus } from "react-icons/ci";
 const NavBar = () => {
   const [openModal, setOpenModal] = useState(false);
   const [user, setUser] = useState(null);
@@ -68,6 +68,10 @@ const NavBar = () => {
     navigate("/home");
     setOpenModal(false);
   }
+  function handleCreateCategory() {
+    navigate("/createCategory");
+    setOpenModal(false);
+  }
   return (
     <nav className="py-2 bg-white text-black shadow-md">
       <div className="lg:max-w-[1300px] md:max-w-[800px] max-w-[300px] mx-auto flex justify-between items-center">
@@ -117,6 +121,16 @@ const NavBar = () => {
                     Your Blogs <BsCollection />
                   </p>
                 </button>
+                {user?.role === "admin" && (
+                  <button
+                    onClick={handleCreateCategory}
+                    className="block px-4 py-2 hover:bg-gray-100 w-full"
+                  >
+                    <p className="flex items-center justify-center gap-1">
+                      Create Category <CiSquarePlus />
+                    </p>
+                  </button>
+                )}
                 <button
                   onClick={handleLogout}
                   className="block w-full px-4 py-2 text-red-500 hover:bg-gray-100 "
