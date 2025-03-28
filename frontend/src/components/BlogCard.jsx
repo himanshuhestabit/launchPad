@@ -1,7 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-
+import { FaExternalLinkAlt } from "react-icons/fa";
+import { GrDocumentUpdate } from "react-icons/gr";
+import { MdDelete } from "react-icons/md";
 const BlogCard = ({
   blog,
   onRead,
@@ -16,7 +18,9 @@ const BlogCard = ({
     const doc = new DOMParser().parseFromString(html, "text/html");
     return doc.body.textContent.slice(0, length) + "...";
   };
-
+  function handleRead(id) {
+    navigate("/readBlog", { state: { id } });
+  }
   return (
     <motion.div
       variants={{
@@ -49,24 +53,24 @@ const BlogCard = ({
         />
         <div className="mt-4 flex lg:flex-row flex-col gap-4">
           <button
-            className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white hover:brightness-90 px-4 py-2 rounded-md transition-all duration-200"
-            onClick={() => onRead(blog?._id)}
+            className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white hover:brightness-90 px-4 py-2 rounded-md transition-all duration-200 flex items-center justify-center gap-2"
+            onClick={() => handleRead(blog?._id)}
           >
-            Read
+            Read More <FaExternalLinkAlt />
           </button>
           {showActions && (
             <>
               <button
                 onClick={() => onUpdate(blog?._id)}
-                className="bg-gradient-to-r from-yellow-300 to-yellow-500 px-4 py-2 rounded-md hover:brightness-95 transition"
+                className="bg-gradient-to-r from-yellow-300 to-yellow-500 px-4 py-2 rounded-md hover:brightness-95 transition flex items-center justify-center gap-2"
               >
-                Update
+                Update <GrDocumentUpdate />
               </button>
               <button
-                className="bg-gradient-to-r from-red-400 to-red-600 px-4 py-2 rounded-md hover:brightness-95 transition"
+                className="bg-gradient-to-r from-red-400 to-red-600 px-4 py-2 rounded-md hover:brightness-95 transition flex items-center justify-center gap-2"
                 onClick={() => onDelete(blog?._id)}
               >
-                Delete
+                Delete <MdDelete />
               </button>
             </>
           )}

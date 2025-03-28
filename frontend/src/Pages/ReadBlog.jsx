@@ -12,6 +12,7 @@ const ReadBlog = () => {
   const { blogDetails } = useGetBlogDetails({ id: blogId });
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
+  const [submittingComment, setSubmittingComment] = useState(false);
   const [user, setUser] = useState(null);
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -48,6 +49,7 @@ const ReadBlog = () => {
   const handleCommentSubmit = async () => {
     if (comment.trim() === "") return;
     try {
+      setSubmittingComment(true);
       const response = await axios.post(
         `${API_URL}/api/v1/comment/createComment`,
         { blogId, content: comment },
@@ -58,7 +60,10 @@ const ReadBlog = () => {
         setComment("");
       }
     } catch (error) {
+      setSubmittingComment(false);
       console.error("Error adding comment:", error);
+    } finally {
+      setSubmittingComment(false);
     }
   };
 
@@ -153,6 +158,7 @@ const ReadBlog = () => {
                 whileHover={{ scale: 1.05 }}
                 className="mt-2 bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white px-6 py-2 rounded-lg transition-all duration-300 hover:brightness-90"
                 onClick={handleCommentSubmit}
+                disabled={submittingComment}
               >
                 Submit
               </motion.button>
@@ -167,7 +173,7 @@ const ReadBlog = () => {
                 {comments.map((c) => (
                   <div
                     key={c._id}
-                    className="bg-white text-black border border-red-200 p-4 rounded-lg flex justify-between items-center"
+                    className="bg-gray-100 text-black border border-gray-200 p-5 rounded-lg flex justify-between items-center"
                   >
                     <div>
                       <p className="text-gray-700">{c.content}</p>

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import BlogCard from "../components/BlogCard";
-
+import { BsFillCollectionFill } from "react-icons/bs";
 const AllBlogs = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -63,7 +63,7 @@ const AllBlogs = () => {
       className="w-full px-4 sm:px-6 lg:px-8"
     >
       <div className="max-w-7xl mx-auto py-10">
-        <h2 className="text-4xl font-bold text-center bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text pb-6">
+        <h2 className="text-3xl font-bold text-center bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text pb-6">
           Read Blogs
         </h2>
 
@@ -75,13 +75,13 @@ const AllBlogs = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
-            className="text-center mt-8"
+            className="flex items-center justify-center mt-8"
           >
             <button
               onClick={() => navigate("/blog")}
-              className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white px-6 py-2 rounded-lg transition-all duration-300 hover:brightness-90 cursor-pointer"
+              className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white px-6 py-2 rounded-lg transition-all duration-300 hover:brightness-90 cursor-pointer flex items-center justify-center gap-2"
             >
-              Read All Blogs
+              Read All Blogs <BsFillCollectionFill />
             </button>
           </motion.div>
         )}

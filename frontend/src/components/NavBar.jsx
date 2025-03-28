@@ -101,7 +101,7 @@ const NavBar = () => {
               </div>
 
               <div
-                className={`absolute top-12 right-20 bg-white shadow-lg rounded-lg   w-48 ${
+                className={`absolute top-14 lg:right-[300px] custom:right-[100px] sm:right-[50px] bg-gray-200 shadow-lg rounded-lg py-3  lg:w-1/4 lg:h-1/4 md:w-1/3 md:h-1/3 sm:w-1/2 sm:h-1/2 flex items-center justify-center flex-col gap-2 ${
                   openModal ? "block" : "hidden"
                 }`}
               >

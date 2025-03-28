@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-
+import { FaExternalLinkAlt } from "react-icons/fa";
 const RecentlyAddedBlogs = () => {
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL;
@@ -63,9 +63,9 @@ const RecentlyAddedBlogs = () => {
               <div className="mt-auto">
                 <button
                   onClick={() => handleVisit(_id)}
-                  className="inline-block mt-4 bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white px-4 py-2 rounded-lg hover:brightness-90"
+                  className=" mt-4 bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white px-4 py-2 rounded-lg hover:brightness-90 flex items-center justify-center gap-2"
                 >
-                  Read More
+                  Read More <FaExternalLinkAlt />
                 </button>
               </div>
             </div>
