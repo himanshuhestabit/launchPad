@@ -2,18 +2,13 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import BlogCard from "../components/BlogCard";
 
 const AllBlogs = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const API_URL = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
-
-  // Function to truncate HTML content safely
-  const truncateHtml = (html, length) => {
-    const doc = new DOMParser().parseFromString(html, "text/html");
-    return doc.body.textContent.slice(0, length) + "...";
-  };
 
   useEffect(() => {
     async function fetchBlogs() {
@@ -52,46 +47,8 @@ const AllBlogs = () => {
         viewport={{ once: true }}
         className="flex flex-col gap-8"
       >
-        {blogs.slice(0, 4).map((blog, index) => (
-          <motion.div
-            key={blog._id}
-            variants={{
-              hidden: { opacity: 0, y: 50 },
-              visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-            }}
-            className="flex flex-col lg:flex-row items-center gap-6 bg-white p-6 rounded-lg shadow-lg"
-          >
-            {/* Left Content */}
-            <div className="w-full lg:w-1/2 text-center lg:text-left">
-              <h3 className="text-2xl font-bold mb-2 text-black">
-                {blog.title}
-              </h3>
-              <div
-                className="text-sm sm:text-base font-thin text-gray-600 mb-4"
-                dangerouslySetInnerHTML={{
-                  __html: truncateHtml(blog.content, 120),
-                }}
-              />
-              <p className="text-sm text-gray-500">Author: {blog.author}</p>
-              <button
-                onClick={() =>
-                  navigate("/readBlog", { state: { id: blog._id } })
-                }
-                className="mt-4 bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white px-4 py-2 rounded-md hover:brightness-95 transition"
-              >
-                Read More
-              </button>
-            </div>
-
-            {/* Right Image */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center">
-              <img
-                src={blog.image}
-                alt={blog.title}
-                className="w-3/4 h-3/4 object-cover rounded-md shadow-md"
-              />
-            </div>
-          </motion.div>
+        {blogs.slice(0, 4).map((blog) => (
+          <BlogCard key={blog._id} blog={blog} />
         ))}
       </motion.div>
     );
@@ -112,7 +69,6 @@ const AllBlogs = () => {
 
         {content}
 
-        {/* Read All Blogs Button */}
         {!loading && blogs.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 50 }}

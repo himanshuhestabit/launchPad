@@ -45,29 +45,29 @@ const SearchBlog = () => {
   }, [searchBlog]);
 
   return (
-    <div className="flex flex-col items-center py-5 max-w-[1700px] mx-auto w-full">
+    <div className="flex flex-col items-center py-5 lg:max-w-[1700px] md:max-w-[1200px] max-w-[300px] mx-auto w-full">
       <div className="w-3/4">
         <input
           type="text"
           name="title"
           value={inputSearch}
           onChange={handleChange}
-          className="w-full py-2 rounded-full bg-gradient-to-r from-[#ebebeb] to-[#efafa9] text-black shadow-lg outline-none px-4"
+          className="w-full py-2 rounded-full bg-gray-200 text-black shadow-lg outline-none px-4"
           placeholder="Search Your Blog...."
           onFocus={() => setIsOpen(true)}
           onBlur={() => setTimeout(() => setIsOpen(false), 300)}
         />
       </div>
       {isOpen && blogResults.length > 0 && (
-        <div className="bg-white border-gray-500 shadow-lg border mt-5 w-2/3 px-10 py-5">
+        <div className="bg-gray-200 shadow-lg border rounded-lg mt-5 w-2/3 px-10 py-5">
           {blogResults.map((blog) => (
             <div
               key={blog._id}
-              className="py-1 flex items-center justify-between"
+              className="py-1 flex items-center lg:justify-between lg:flex-row flex-col gap-1 justify-center "
             >
               <p>{blog.title}</p>
               <button
-                className="px-4 py-1 cursor-pointer rounded-lg bg-blue-500 hover:bg-blue-600 transition-all duration-300"
+                className="px-4 py-1 cursor-pointer rounded-lg bg-gradient-to-r from-[#AF57C5] to-[#D33427] hover:brightness-95 text-white transition-all duration-300"
                 onClick={() => handleClick(blog._id)}
               >
                 Visit

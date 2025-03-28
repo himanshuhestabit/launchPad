@@ -155,7 +155,7 @@ const Login = () => {
 
               <div>
                 <input
-                  className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white px-6 py-2 rounded-lg transition-all duration-300 hover:brightness-90 cursor-pointer"
+                  className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white px-6 py-2 rounded-lg transition-all duration-300 hover:brightness-95 cursor-pointer"
                   type="submit"
                   value={isSubmitting ? "Submitting..." : "Login"}
                   disabled={isSubmitting}
