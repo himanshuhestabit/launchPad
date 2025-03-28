@@ -35,14 +35,16 @@ const Login = () => {
       const response = await axios.post(`${API_URL}/api/v1/user/login`, data, {
         withCredentials: true,
       });
+      console.log(response);
       if (response.status === 200) {
         const { role, _id } = response.data.userExist;
         dispatch(loginSuccess({ role, userId: _id }));
-        toast.success("User logged in successfully!");
+        toast.success(response?.data?.message);
         navigate("/home");
       }
     } catch (error) {
-      toast.error("Failed to login user");
+      console.log(error);
+      toast.error(error?.response?.data?.message);
     }
   }
 
