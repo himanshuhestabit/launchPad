@@ -45,7 +45,7 @@ const SearchBlog = () => {
   }, [searchBlog]);
 
   return (
-    <div className="flex flex-col items-center py-5 w-full">
+    <div className="flex flex-col items-center py-5 max-w-[1700px] mx-auto w-full">
       <div className="w-3/4">
         <input
           type="text"
@@ -59,7 +59,7 @@ const SearchBlog = () => {
         />
       </div>
       {isOpen && blogResults.length > 0 && (
-        <div className="bg-white border-gray-500 shadow-lg border mt-5 w-2/3 px-5 py-5">
+        <div className="bg-white border-gray-500 shadow-lg border mt-5 w-2/3 px-10 py-5">
           {blogResults.map((blog) => (
             <div
               key={blog._id}

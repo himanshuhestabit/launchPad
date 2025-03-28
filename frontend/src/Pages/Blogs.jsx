@@ -102,7 +102,7 @@ const Blogs = () => {
                 <motion.button
                   onClick={() => handleRead(_id)}
                   whileHover={{ scale: 1.05 }}
-                  className="bg-gradient-to-r text-white from-[#718eeb] to-[#0521c2] hover:brightness-90 px-4 py-2 rounded-md transition-all duration-200"
+                  className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white hover:brightness-90 px-4 py-2 rounded-md transition-all duration-200"
                 >
                   Read Blog
                 </motion.button>
@@ -130,7 +130,7 @@ const Blogs = () => {
               <img
                 src={image}
                 alt={title}
-                className="w-3/4 h-3/4 object-cover rounded-md"
+                className="w-3/4 h-3/4 object-cover rounded-md shadow-md"
               />
             </div>
           </motion.div>

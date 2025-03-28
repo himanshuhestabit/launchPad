@@ -99,7 +99,7 @@ const ReadBlog = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="text-3xl lg:text-5xl font-extrabold text-center text-[#F8B400] mb-6"
+            className="text-3xl lg:text-5xl font-extrabold text-center bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text mb-6"
           >
             {blogDetails?.title}
           </motion.h1>
@@ -151,7 +151,7 @@ const ReadBlog = () => {
               />
               <motion.button
                 whileHover={{ scale: 1.05 }}
-                className="mt-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-2 rounded-lg transition-all duration-300 hover:brightness-90"
+                className="mt-2 bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white px-6 py-2 rounded-lg transition-all duration-300 hover:brightness-90"
                 onClick={handleCommentSubmit}
               >
                 Submit
@@ -167,11 +167,11 @@ const ReadBlog = () => {
                 {comments.map((c) => (
                   <div
                     key={c._id}
-                    className="bg-gray-800 p-4 rounded-lg flex justify-between items-center"
+                    className="bg-white text-black border border-red-200 p-4 rounded-lg flex justify-between items-center"
                   >
                     <div>
-                      <p className="text-gray-300">{c.content}</p>
-                      <p className="text-gray-400 text-sm italic">
+                      <p className="text-gray-700">{c.content}</p>
+                      <p className="text-gray-800 text-sm italic">
                         - {c.user?.name || "Anonymous"}
                       </p>
                     </div>

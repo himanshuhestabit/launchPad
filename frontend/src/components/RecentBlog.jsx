@@ -12,7 +12,7 @@ const RecentBlog = () => {
 
   return (
     <div>
-      <h1 className="text-4xl font-extrabold text-center text-[#F8B400] mb-6">
+      <h1 className="text-4xl font-extrabold text-center bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text mb-6">
         Recent Blogs
       </h1>
 
@@ -23,12 +23,12 @@ const RecentBlog = () => {
           {recentBlogs.map((item) => (
             <div
               key={item?._id}
-              className="flex items-center justify-between py-2 text-black"
+              className="flex items-center justify-between gap-1 py-2 text-black"
             >
-              <p>{item?.title?.slice(0, 36)}...</p>
+              <p>{item?.title?.slice(0, 26)}...</p>
               <button
                 onClick={() => handleVisit(item?._id)}
-                className="px-5 py-1 bg-blue-400 hover:bg-blue-500 transition-all duration-300 rounded-md"
+                className="px-5 py-1 bg-gradient-to-r from-[#AF57C5] to-[#D33427] hover:brightness-95 text-white transition-all duration-300 rounded-md"
               >
                 Visit
               </button>

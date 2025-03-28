@@ -117,12 +117,12 @@ const CreateBlog = () => {
             <label htmlFor="content">Enter Content</label>
             <div className="bg-white text-black w-full p-3 rounded-md border border-gray-500 max-h-[300px] overflow-y-auto">
               <Editor
-                className="bg-white text-black"
+                className="!bg-white !text-black"
                 editorState={editorState}
                 onEditorStateChange={handleEditorChange}
-                wrapperClassName="editor-wrapper"
-                editorClassName="editor-content min-h-[200px]"
-                toolbarClassName="editor-toolbar"
+                wrapperClassName="editor-wrapper bg-white text-black"
+                editorClassName="editor-content min-h-[200px] bg-white text-black "
+                toolbarClassName="editor-toolbar bg-white text-black border-none"
               />
             </div>
             {errors.content && (
@@ -170,7 +170,7 @@ const CreateBlog = () => {
           {/* Submit Button */}
           <div>
             <input
-              className="bg-gradient-to-r from-[#6ac258] to-[#05a31c] text-white px-6 py-2 rounded-md cursor-pointer transition-all duration-300 w-full"
+              className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white px-6 py-2 rounded-md cursor-pointer transition-all duration-300 w-full"
               type="submit"
               value={isSubmitting ? "Submitting..." : "Submit"}
               disabled={isSubmitting}
@@ -182,7 +182,7 @@ const CreateBlog = () => {
             <button
               type="button"
               onClick={() => navigate("/home")}
-              className="bg-gradient-to-r from-[#e8666a] to-[#a1031e] text-white px-6 py-2 rounded-md cursor-pointer hover:bg-[#8A2D70] transition-all duration-300 w-full"
+              className="bg-gradient-to-r from-[#fa333a] to-[#a1031e] text-white px-6 py-2 rounded-md cursor-pointer hover:bg-[#8A2D70] transition-all duration-300 w-full"
             >
               Cancel
             </button>

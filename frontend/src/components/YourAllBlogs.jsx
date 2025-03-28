@@ -72,7 +72,7 @@ const YourAllBlogs = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               whileHover={{ scale: 1.02 }}
-              className="flex lg:flex-row flex-col items-center bg-gray-100 rounded-lg p-6 shadow-md gap-6"
+              className="flex lg:flex-row flex-col items-center bg-white rounded-lg p-6 shadow-md gap-6"
             >
               <div className="lg:w-3/5 w-full">
                 <h3 className="text-2xl font-bold text-gray-800">
@@ -86,7 +86,7 @@ const YourAllBlogs = () => {
                 />
                 <div className="mt-4 flex gap-4">
                   <button
-                    className="bg-gradient-to-r text-white from-[#718eeb] to-[#0521c2] hover:brightness-90 px-4 py-2 rounded-md transition-all duration-200"
+                    className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white hover:brightness-90 px-4 py-2 rounded-md transition-all duration-200"
                     onClick={() => handleRead(blog?._id)}
                   >
                     Read
@@ -114,7 +114,7 @@ const YourAllBlogs = () => {
                 <img
                   src={blog.image}
                   alt={blog.title}
-                  className="w-full h-48 object-cover rounded-lg"
+                  className="w-3/4 h-3/4 object-cover rounded-md shadow-md"
                 />
               </motion.div>
             </motion.div>
