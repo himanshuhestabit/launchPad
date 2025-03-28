@@ -171,7 +171,7 @@ const ReadBlog = () => {
                   >
                     <div>
                       <p className="text-gray-700">{c.content}</p>
-                      <p className="text-gray-800 text-sm italic">
+                      <p className="text-gray-400 text-sm italic">
                         - {c.user?.name || "Anonymous"}
                       </p>
                     </div>
