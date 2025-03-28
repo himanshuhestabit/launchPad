@@ -52,7 +52,9 @@ const RecentlyAddedBlogs = () => {
               className="w-full h-48 object-cover rounded-md"
             />
             <div className="p-4 flex flex-col flex-grow">
-              <h3 className="text-xl font-bold text-gray-800">{title}</h3>
+              <h3 className="text-xl font-bold text-gray-800">
+                {title.slice(0, 30)}..
+              </h3>
               <p className="text-sm text-gray-500">By {author}</p>
               <div
                 className="text-gray-700 mt-2 line-clamp-2"
