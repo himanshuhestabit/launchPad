@@ -115,20 +115,14 @@ export const getUserBlogs = async (req, res) => {
 
 export const getUserProfile = async (req, res) => {
   try {
-    const user = req.user; // Assuming user info is available in req.user from auth middleware
+    const user = req.user;
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
     res.status(200).json({
       success: true,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        profilePicture: user.profilePicture,
-      },
+      user,
     });
   } catch (error) {
     console.error("Error fetching user:", error);

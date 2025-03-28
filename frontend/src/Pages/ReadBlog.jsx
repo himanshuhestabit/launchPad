@@ -79,7 +79,7 @@ const ReadBlog = () => {
       toast.error("Error deleting comment");
     }
   };
-
+  console.log(user);
   return (
     <motion.div
       initial={{ opacity: 0, y: 100 }}
@@ -176,7 +176,7 @@ const ReadBlog = () => {
                       </p>
                     </div>
                     {user &&
-                      (user._id === c.user?._id || user.role === "admin") && (
+                      (user.id === c.user?._id || user.role === "admin") && (
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           onClick={() => handleDeleteComment(c._id)}
@@ -201,7 +201,7 @@ const ReadBlog = () => {
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="w-full lg:w-1/4 bg-white p-6 rounded-lg shadow-lg"
+          className="w-full lg:w-1/4 lg:max-h-[40vh] bg-white p-6 rounded-lg shadow-lg"
         >
           <RecentBlog />
         </motion.div>
