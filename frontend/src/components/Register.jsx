@@ -30,22 +30,26 @@ const Register = () => {
 
   async function onSubmit(data) {
     try {
-      const response = await axios.post(
-        `${API_URL}/api/v1/user/register`,
-        data,
-        {
-          withCredentials: true,
-        }
-      );
+      if (data?.password === data?.confirmPassword) {
+        const response = await axios.post(
+          `${API_URL}/api/v1/user/register`,
+          data,
+          {
+            withCredentials: true,
+          }
+        );
 
-      if (response.status === 201) {
-        toast.success("User registered successfully!");
-        navigate("/login");
+        if (response.status === 201) {
+          toast.success(response?.data?.message);
+          navigate("/login");
+        } else {
+          throw new Error("User data missing in response");
+        }
       } else {
-        throw new Error("User data missing in response");
+        toast.error("Password and Confirm Password is not matching");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to register user");
+      toast.error(error.response?.data?.message);
     }
   }
 
@@ -182,7 +186,48 @@ const Register = () => {
                   </div>
                 )}
               </div>
-
+              <div className="flex flex-col gap-2 w-full">
+                <label className="text-lg font-semibold flex items-center gap-1">
+                  <RiLockPasswordFill />
+                  Confirm Password
+                </label>
+                <div className="relative flex items-center w-full">
+                  <input
+                    type={readPass ? "text" : "password"}
+                    {...register("confirmPassword", {
+                      required: "Confirm Password is required",
+                      minLength: {
+                        value: 8,
+                        message: "Password must be at least 8 characters",
+                      },
+                      maxLength: {
+                        value: 16,
+                        message: "Password must be at most 16 characters",
+                      },
+                    })}
+                    className="bg-gray-300 w-full py-3 px-5 pr-12 rounded-full outline-none"
+                    autoComplete="off"
+                    placeholder="Confirm Your Password"
+                  />
+                  {readPass ? (
+                    <FaEye
+                      className="absolute right-4 md:right-6 cursor-pointer text-gray-600"
+                      onClick={handleClick}
+                    />
+                  ) : (
+                    <FaEyeSlash
+                      className="absolute right-4 md:right-6 cursor-pointer text-gray-600"
+                      onClick={handleClick}
+                    />
+                  )}
+                </div>
+                {errors.confirmPassword && (
+                  <div className="flex items-center gap-1 text-red-500">
+                    <MdError />
+                    <p>{errors.confirmPassword.message}</p>
+                  </div>
+                )}
+              </div>
               <div>
                 <input
                   className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white px-6 py-2 rounded-lg transition-all duration-300 hover:brightness-90 cursor-pointer"
