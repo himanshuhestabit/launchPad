@@ -55,7 +55,7 @@ const SearchBlog = () => {
           className="w-full py-2 rounded-full bg-gradient-to-r from-[#ebebeb] to-[#efafa9] text-black shadow-lg outline-none px-4"
           placeholder="Search Your Blog...."
           onFocus={() => setIsOpen(true)}
-          onBlur={() => setTimeout(() => setIsOpen(false), 200)}
+          onBlur={() => setTimeout(() => setIsOpen(false), 300)}
         />
       </div>
       {isOpen && blogResults.length > 0 && (
