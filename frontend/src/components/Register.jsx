@@ -92,7 +92,7 @@ const Register = () => {
                     required: "Name is required",
                     pattern: {
                       value: /^[A-Za-z\s]+$/,
-                      message: "Only alphabets are allowed",
+                      message: "Only Characters are allowed",
                     },
                     minLength: {
                       value: 2,
@@ -105,7 +105,7 @@ const Register = () => {
                   })}
                   className="bg-gray-300 w-full py-3 px-5 rounded-full outline-none"
                   autoComplete="off"
-                  placeholder="Enter Your Name"
+                  placeholder="Please Enter Your Name"
                 />
                 {errors.name && (
                   <div className="flex items-center gap-1 text-red-500">
@@ -124,8 +124,8 @@ const Register = () => {
                   {...register("email", {
                     required: "Email is required",
                     pattern: {
-                      value: /^[a-zA-Z0-9._%+-]+@gmail\.com$/,
-                      message: "Must be a valid Gmail address",
+                      value: /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/,
+                      message: "Please Enter Valid Email",
                     },
                   })}
                   className="bg-gray-300 w-full py-3 px-5 rounded-full outline-none"
