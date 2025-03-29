@@ -1,26 +1,23 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { GrDocumentUpdate } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
-const BlogCard = ({
-  blog,
-  onRead,
-  onUpdate,
-  onDelete,
-  showActions = false,
-}) => {
+
+const BlogCard = ({ blog, onUpdate, onDelete, showActions = false }) => {
   const navigate = useNavigate();
 
-  // Function to truncate HTML content safely
   const truncateHtml = (html, length) => {
     const doc = new DOMParser().parseFromString(html, "text/html");
     return doc.body.textContent.slice(0, length) + "...";
   };
+
   function handleRead(id) {
     navigate("/readBlog", { state: { id } });
   }
+
   return (
     <motion.div
       variants={{
@@ -78,6 +75,24 @@ const BlogCard = ({
       </div>
     </motion.div>
   );
+};
+
+BlogCard.propTypes = {
+  blog: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+  }).isRequired,
+  onUpdate: PropTypes.func,
+  onDelete: PropTypes.func,
+  showActions: PropTypes.bool,
+};
+
+BlogCard.defaultProps = {
+  onUpdate: () => {},
+  onDelete: () => {},
+  showActions: false,
 };
 
 export default BlogCard;
