@@ -82,26 +82,25 @@ const NavBar = () => {
           Blogs
         </button>
 
-        <div className="flex space-x-6 items-center">
+        <div className="flex  items-center">
           {isAuthenticated ? (
-            <div className="flex items-start justify-center gap-2">
-              <div>
-                <button
-                  onClick={handleClick}
-                  className="w-12 h-12 flex items-center justify-center bg-gradient-to-r from-[#AF57C5] to-[#D33427] rounded-full text-white text-xl"
-                >
-                  <FaUserAlt />
-                </button>
-              </div>
+            <div className="flex items-center justify-center gap-2">
               <div className="">
-                <p className="text-center font-semibold ">{user?.name}</p>
+                <p className="text-center font-semibold  ">{user?.name}</p>
                 <p className="text-center text-gray-500 text-sm font-thin">
                   {user?.role}
                 </p>
               </div>
-
+              <div>
+                <button
+                  onClick={handleClick}
+                  className="lg:w-12 lg:h-12 h-10 w-10 flex items-center justify-center bg-gradient-to-r from-[#AF57C5] to-[#D33427] rounded-full text-white lg:text-xl text-lg"
+                >
+                  <FaUserAlt />
+                </button>
+              </div>
               <div
-                className={`absolute top-14 lg:right-[300px] custom:right-[100px] sm:right-[50px] bg-gray-200 shadow-lg rounded-lg py-3  lg:w-1/4 lg:h-1/4 md:w-1/3 md:h-1/3 sm:w-1/2 sm:h-1/2 flex items-center justify-center flex-col gap-2 ${
+                className={`absolute top-14 lg:right-[300px] right-[50px] bg-gray-200 shadow-lg rounded-lg py-3  lg:w-1/4 lg:h-1/4 md:w-1/3 md:h-1/3 sm:w-1/2 sm:h-1/2 flex items-center justify-center flex-col gap-2 ${
                   openModal ? "block" : "hidden"
                 }`}
               >

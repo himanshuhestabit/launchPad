@@ -18,10 +18,8 @@ const FooterNavbar = () => {
         </div>
 
         {/* Important Links */}
-        <div className="w-1/3  lg:text-center text-start">
-          <h2 className="lg:text-xl font-bold text-gray-600">
-            Important Links
-          </h2>
+        <div className="lg:w-1/3 w-full  lg:text-center text-start ">
+          <h2 className="text-xl font-bold text-gray-600">Important Links</h2>
           <ul className="mt-2 space-y-2">
             <li>
               <Link to={"/home"} className="text-gray-400 hover:text-gray-600">
@@ -29,7 +27,7 @@ const FooterNavbar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/blogs" className="text-gray-400 hover:text-gray-600">
+              <Link to="/blog" className="text-gray-400 hover:text-gray-600">
                 Blogs
               </Link>
             </li>
@@ -45,7 +43,7 @@ const FooterNavbar = () => {
         </div>
 
         {/* Social Media */}
-        <div className="w-1/3 flex flex-col lg:items-end items-start">
+        <div className="lg:w-1/3 w-full flex flex-col lg:items-end items-start">
           <h2 className="text-xl font-bold text-gray-600">Follow Us</h2>
           <div className="mt-2 flex space-x-4">
             <Link
