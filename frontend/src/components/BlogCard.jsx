@@ -62,12 +62,12 @@ const BlogCard = ({
             <>
               <button
                 onClick={() => onUpdate(blog?._id)}
-                className="bg-gradient-to-r from-yellow-300 to-yellow-500 px-4 py-2 rounded-md hover:brightness-95 transition flex items-center justify-center gap-2"
+                className="bg-gradient-to-r from-[#007FFF] to-[#6CB4EE] hover:from-[#1034A6] hover:to-[#00BFFF] text-white px-4 py-2 rounded-md hover:brightness-95 transition flex items-center justify-center gap-2"
               >
                 Update <GrDocumentUpdate />
               </button>
               <button
-                className="bg-gradient-to-r from-red-400 to-red-600 px-4 py-2 rounded-md hover:brightness-95 transition flex items-center justify-center gap-2"
+                className="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-md hover:brightness-95 transition flex items-center justify-center gap-2"
                 onClick={() => onDelete(blog?._id)}
               >
                 Delete <MdDelete />
