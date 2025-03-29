@@ -103,8 +103,8 @@ export const getUserBlogs = async (req, res) => {
 
     // Fetch blogs created by the user and populate related fields
     const blogs = await Blog.find({ user: userId })
-      .populate("category", "name") // Populate category name
-      .populate("user", "name email") // Populate user details (author)
+      .populate("categoryId") // Populate category name
+      .populate("user") // Populate user details (author)
       .sort({ createdAt: -1 }); // Sort by newest first
 
     res.status(200).json({ success: true, blogs });
