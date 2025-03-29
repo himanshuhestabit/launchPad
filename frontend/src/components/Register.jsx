@@ -256,7 +256,7 @@ const Register = () => {
           initial={{ x: 100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="w-2/4 h-[90%] lg:flex items-start justify-center hidden"
+          className="w-2/4 h-[90%] lg:flex items-start justify-end hidden"
         >
           <div className="w-[92%] h-[92%] flex items-center justify-center border-animation">
             <div className="w-[94%] h-[94%] rounded-lg overflow-hidden">

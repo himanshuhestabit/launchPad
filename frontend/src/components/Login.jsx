@@ -179,7 +179,7 @@ const Login = () => {
 
         {/* Right Side (Image) - Sliding from Right */}
         <motion.div
-          className="w-2/4 h-[90%] lg:flex items-start justify-center hidden"
+          className="w-2/4 h-[90%] lg:flex items-start justify-end hidden"
           initial="hidden"
           animate="visible"
           variants={slideRight}
