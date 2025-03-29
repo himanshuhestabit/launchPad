@@ -11,60 +11,57 @@ import draftToHtml from "draftjs-to-html";
 const CreateBlog = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("isAuthenticated"));
+  const [stage, setStage] = useState(1);
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
+    if (!user) navigate("/login");
   }, [user, navigate]);
+
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/api/v1/category/getCategory`, { withCredentials: true })
+      .then((res) => setCategories(res.data))
+      .catch((err) => console.error("Error fetching categories", err));
+  }, [API_URL]);
 
   const {
     register,
     handleSubmit,
     setValue,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm();
 
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const [image, setImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
-
-  const API_URL = process.env.REACT_APP_API_URL;
-
-  // Convert editor content to HTML and update form state
   const handleEditorChange = (state) => {
     setEditorState(state);
     const contentHTML = draftToHtml(convertToRaw(state.getCurrentContent()));
     setValue("content", contentHTML);
   };
 
-  // Handle Image Upload with Preview
   const handleImageChange = useCallback((e) => {
     const file = e.target.files[0];
     if (file) {
       setImage(file);
-      const imageUrl = URL.createObjectURL(file);
-      setImagePreview(imageUrl);
+      setImagePreview(URL.createObjectURL(file));
     }
   }, []);
 
-  // Cleanup object URL on unmount
-  useEffect(() => {
-    return () => {
-      if (imagePreview) URL.revokeObjectURL(imagePreview);
-    };
-  }, [imagePreview]);
+  useEffect(
+    () => () => imagePreview && URL.revokeObjectURL(imagePreview),
+    [imagePreview]
+  );
 
   const onSubmit = async (data) => {
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("content", data.content);
-    formData.append("author", data.author);
-    formData.append("categoryId", "67e2ad02b1457b94d13fd9bb"); // Replace with actual categoryId
-
-    if (image) {
-      formData.append("image", image);
-    }
+    formData.append("author", user.name);
+    formData.append("categoryId", data.category);
+    if (image) formData.append("image", image);
 
     try {
       const response = await axios.post(
@@ -75,119 +72,139 @@ const CreateBlog = () => {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-
-      if (response.status === 201) {
-        toast.success("Blog created successfully");
-        navigate("/home");
-      }
+      console.log(response);
+      toast.success(response?.data?.message);
+      navigate("/home");
     } catch (error) {
-      console.error("Error creating blog", error);
-      toast.error("Error In Creating Blog");
+      toast.error(error.response.data.message);
     }
   };
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-white text-black flex-col p-4">
-      <div className="  bg-white w-full max-w-3xl p-8 rounded-xl flex flex-col items-center justify-center shadow-lg">
-        <p className="text-3xl font-bold mb-6 text-center">Create Your Blog</p>
+    <div className="flex flex-col md:flex-row lg:max-w-[1300px] md:max-w-[800px] max-w-[300px] mx-auto  min-h-screen p-4 my-10 text-black">
+      {/* Left Side Form */}
+      <div className="md:w-2/3 p-8 rounded-xl ">
+        <h2 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text">
+          Create Your Blog
+        </h2>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="w-full flex flex-col gap-4"
         >
-          {/* Title Input */}
-          <div className="flex flex-col gap-2 w-full">
-            <label htmlFor="title">Enter Title</label>
-            <input
-              className="bg-white text-black w-full p-3 rounded-md border border-gray-500 focus:outline-none focus:border-purple-400"
-              {...register("title", {
-                required: "Title is required",
-                minLength: {
-                  value: 3,
-                  message: "Title must be at least 3 characters",
-                },
-              })}
-            />
-            {errors.title && (
-              <span className="text-red-500">{errors.title.message}</span>
-            )}
-          </div>
-
-          {/* Content Editor (Scrollable) */}
-          <div className="flex flex-col gap-2 w-full">
-            <label htmlFor="content">Enter Content</label>
-            <div className="bg-white text-black w-full p-3 rounded-md border border-gray-500 max-h-[300px] overflow-y-auto">
-              <Editor
-                className="!bg-white !text-black"
-                editorState={editorState}
-                onEditorStateChange={handleEditorChange}
-                wrapperClassName="editor-wrapper bg-white text-black"
-                editorClassName="editor-content min-h-[200px] bg-white text-black "
-                toolbarClassName="editor-toolbar bg-white text-black border-none"
+          {stage === 1 && (
+            <>
+              <label>Enter Title</label>
+              <input
+                {...register("title", { required: "Title is required" })}
+                className="p-3 border rounded-md "
+                placeholder="Enter Blog Title"
               />
-            </div>
-            {errors.content && (
-              <span className="text-red-500">{errors.content.message}</span>
-            )}
-          </div>
+              {errors.title && (
+                <span className="text-red-500">{errors.title.message}</span>
+              )}
 
-          {/* Image Upload with Preview */}
-          <div className="flex flex-col gap-2 w-full">
-            <label htmlFor="image">Upload Image</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="bg-white text-black w-full p-3 rounded-md border border-gray-500 cursor-pointer"
-            />
-            {imagePreview && (
-              <img
-                src={imagePreview}
-                alt="Preview"
-                className="mt-2 w-full h-48 object-cover rounded-md"
+              <label>Enter Content</label>
+              <div className="max-h-[70vh] overflow-y-auto">
+                <Editor
+                  editorState={editorState}
+                  onEditorStateChange={handleEditorChange}
+                  className="border p-3 rounded-md "
+                />
+              </div>
+              {errors.content && (
+                <span className="text-red-500">{errors.content.message}</span>
+              )}
+            </>
+          )}
+
+          {stage === 2 && (
+            <>
+              <label>Upload Image</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="p-3 border rounded-md"
+              />
+              {imagePreview && (
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="w-full h-48 object-cover rounded-md"
+                />
+              )}
+
+              <label>Select Category</label>
+              <select
+                {...register("category", { required: "Category is required" })}
+                className="p-3 border rounded-md"
+              >
+                <option value="">Select Category</option>
+                {categories.map((cat) => (
+                  <option key={cat._id} value={cat._id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+              {errors.category && (
+                <span className="text-red-500">{errors.category.message}</span>
+              )}
+            </>
+          )}
+
+          <div className="flex justify-between mt-4">
+            {stage > 1 && (
+              <button
+                type="button"
+                onClick={() => setStage(stage - 1)}
+                className="bg-gray-500 text-white px-6 py-2 rounded-md"
+              >
+                Back
+              </button>
+            )}
+            {stage < 2 && (
+              <button
+                type="button"
+                onClick={() => setStage(stage + 1)}
+                className="bg-gray-500 text-white px-6 py-2 rounded-md"
+              >
+                Next
+              </button>
+            )}
+            {stage === 2 && (
+              <input
+                type="submit"
+                value="Create Blog"
+                className="bg-gradient-to-r from-[#007FFF] to-[#6CB4EE] hover:from-[#1034A6] hover:to-[#00BFFF] text-white px-6 py-2 rounded-md cursor-pointer"
               />
             )}
-          </div>
-
-          {/* Author Input */}
-          <div className="flex flex-col gap-2 w-full">
-            <label htmlFor="author">Enter Author</label>
-            <input
-              autoComplete="off"
-              className="bg-white text-black w-full p-3 rounded-md border border-gray-500 focus:outline-none focus:border-purple-400"
-              {...register("author", {
-                required: "Author is required",
-                minLength: {
-                  value: 3,
-                  message: "Author must be at least 3 characters",
-                },
-              })}
-            />
-            {errors.author && (
-              <span className="text-red-500">{errors.author.message}</span>
-            )}
-          </div>
-
-          {/* Submit Button */}
-          <div>
-            <input
-              className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white px-6 py-2 rounded-md cursor-pointer transition-all duration-300 w-full"
-              type="submit"
-              value={isSubmitting ? "Submitting..." : "Submit"}
-              disabled={isSubmitting}
-            />
-          </div>
-
-          {/* Cancel Button */}
-          <div>
-            <button
-              type="button"
-              onClick={() => navigate("/home")}
-              className="bg-gradient-to-r from-[#fa333a] to-[#a1031e] text-white px-6 py-2 rounded-md cursor-pointer hover:bg-[#8A2D70] transition-all duration-300 w-full"
-            >
-              Cancel
-            </button>
           </div>
         </form>
+      </div>
+
+      {/* Right Side Progress Indicator */}
+      <div className="md:w-1/3 p-8 flex flex-col items-center">
+        <h3 className="text-xl font-bold">Progress</h3>
+        <div className="mt-4 flex flex-col gap-2 w-full">
+          <div
+            className={`p-3 rounded-md text-center ${
+              stage === 1
+                ? "bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white"
+                : "bg-gray-200"
+            }`}
+          >
+            Step 1: Title & Content
+          </div>
+          <div
+            className={`p-3 rounded-md text-center ${
+              stage === 2
+                ? "bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white"
+                : "bg-gray-200"
+            }`}
+          >
+            Step 2: Image & Category
+          </div>
+        </div>
       </div>
     </div>
   );

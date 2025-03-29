@@ -15,21 +15,16 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #3b1c32;
   border-radius: 10px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #2f2f30;
   border-radius: 10px;
   transition: background 0.3s;
 }
 
 /* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #2f2f2f;
-}
 
 /* Horizontal scrollbar */
 ::-webkit-scrollbar:horizontal {
@@ -78,20 +73,4 @@
   100% {
     transform: rotate(1turn);
   }
-}
-
-.editor-wrapper {
-  border: 1px solid #666;
-  border-radius: 8px;
-  padding: 10px;
-  background: #1a1a1d;
-}
-
-.editor-content {
-  min-height: 200px;
-  color: white;
-}
-
-.editor-toolbar {
-  border-bottom: 1px solid #666;
 }

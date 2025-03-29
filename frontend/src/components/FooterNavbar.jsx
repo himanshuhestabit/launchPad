@@ -8,7 +8,7 @@ const FooterNavbar = () => {
         {/* Company Info */}
         <div className="lg:w-1/3 w-full">
           <Link className="text-3xl font-black bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text">
-            Blog
+            Blogs
           </Link>
           <p className="mt-2 text-gray-400">
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias

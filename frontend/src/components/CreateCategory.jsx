@@ -1,17 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { MdDelete } from "react-icons/md";
+import { FaPlus } from "react-icons/fa6";
+
 const CreateCategory = () => {
   const [categories, setCategories] = useState([]);
   const [categoryName, setCategoryName] = useState("");
-  const API_URL = process.env.REACT_APP_API_URL;
-  // Fetch categories
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  const [loading, setLoading] = useState(false);
 
-  const fetchCategories = async () => {
+  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
+  // Fetch categories
+  const fetchCategories = useCallback(async () => {
     try {
       const res = await axios.get(`${API_URL}/api/v1/category/getCategory`, {
         withCredentials: true,
@@ -20,28 +21,35 @@ const CreateCategory = () => {
     } catch (error) {
       console.error("Error fetching categories", error);
     }
-  };
+  }, [API_URL]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
+
   // Handle category creation
   const handleCreateCategory = async (e) => {
     e.preventDefault();
     if (!categoryName.trim()) return toast.error("Category name is required");
 
+    setLoading(true);
     try {
       const response = await axios.post(
         `${API_URL}/api/v1/category/createCategory`,
-        {
-          name: categoryName,
-        },
+        { name: categoryName },
         { withCredentials: true }
       );
       toast.success(response?.data?.message);
-      console.log(response);
       setCategoryName("");
-      fetchCategories();
+
+      // ✅ Update state locally instead of refetching
+      setCategories((prev) => [...prev, response.data.category]);
     } catch (error) {
       toast.error(
         error?.response?.data?.message || "Failed to create category"
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -53,16 +61,20 @@ const CreateCategory = () => {
         { withCredentials: true }
       );
       toast.success(response?.data?.message);
-      fetchCategories();
+
+      // ✅ Update state locally instead of refetching
+      setCategories((prev) => prev.filter((category) => category._id !== id));
     } catch (error) {
-      toast.error(error?.response.data?.message);
+      toast.error(
+        error?.response?.data?.message || "Failed to delete category"
+      );
     }
   };
 
   return (
     <div className="w-full min-h-[50vh] lg:min-h-[70vh] flex items-center justify-center">
       <div className="lg:max-w-[1300px] md:max-w-[800px] max-w-[300px] mx-auto p-4 bg-white shadow-md rounded-lg w-full">
-        <h2 className="lg:text-3xl text-2xl font-bold mb-4 text-cente bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text">
+        <h2 className="lg:text-3xl text-2xl font-bold mb-4 text-center bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text">
           Manage Categories
         </h2>
 
@@ -80,12 +92,13 @@ const CreateCategory = () => {
           />
           <button
             type="submit"
-            className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] hover:brightness-95 text-white px-4 py-2 rounded"
+            className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] hover:brightness-95 text-white px-4 py-2 rounded flex items-center justify-center gap-1"
+            disabled={loading}
           >
-            Create
+            {loading ? "Creating..." : "Create"} <FaPlus />
           </button>
         </form>
-        {/* Category List */}
+
         <div className="bg-gray-100 p-4 rounded mt-3">
           {categories.length === 0 ? (
             <p className="text-center text-gray-500">No categories found.</p>
@@ -99,10 +112,9 @@ const CreateCategory = () => {
                   <span>{category.name}</span>
                   <button
                     onClick={() => handleDeleteCategory(category._id)}
-                    className="bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded flex items-center gap-1"
+                    className="bg-red-500 text-white px-3 py-1 rounded flex items-center gap-1"
                   >
-                    <p className="hidden md:block lg:block">Delete </p>
-                    <MdDelete />
+                    Delete <MdDelete />
                   </button>
                 </li>
               ))}

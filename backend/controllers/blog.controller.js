@@ -1,13 +1,14 @@
 import { Blog } from "../model/blog.model.js";
+import { Category } from "../model/category.model.js";
 import User from "../model/user.model.js";
 
 export const createBlog = async (req, res) => {
   try {
-    const { title, content } = req.body;
+    const { title, content, categoryId } = req.body;
     const userId = req.user.id;
-    const image = req.file ? req.file.path : "";
+    const image = req.file ? req.file.path : ""; // Ensure image is optional
 
-    if (!title || !content) {
+    if (!title || !content || !categoryId) {
       return res
         .status(400)
         .json({ message: "Title, content, and category are required" });
@@ -17,28 +18,43 @@ export const createBlog = async (req, res) => {
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
 
+    // Validate category
+    const category = await Category.findById(categoryId);
+    if (!category) return res.status(404).json({ message: "Invalid category" });
+
+    // Validate image type (optional, if you're allowing only images)
+    if (req.file && !req.file.mimetype.startsWith("image/")) {
+      return res.status(400).json({ message: "Invalid image format" });
+    }
+
     // Create new blog
     const newBlog = new Blog({
       title,
       content,
       image,
-      user: userId, // Associate blog with user
-      author: user.name,
+      categoryId,
+      user: userId,
+      author: user.name, // Directly use req.user
     });
 
-    // Save blog
-    await newBlog.save();
+    // Save blog & update user's blog list in parallel
+    await Promise.all([
+      newBlog.save(),
+      User.findByIdAndUpdate(userId, { $push: { blogs: newBlog._id } }),
+    ]);
 
-    // Update user model to include the blog
-    user.blogs.push(newBlog._id);
-    await user.save();
+    // Populate user and category for better frontend usage
+    const populatedBlog = await Blog.findById(newBlog._id)
+      .populate("user", "name email")
+      .populate("categoryId", "name");
 
     res.status(201).json({
       success: true,
       message: "Blog created successfully",
-      blog: newBlog,
+      blog: populatedBlog,
     });
   } catch (error) {
+    console.error("Error creating blog:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
