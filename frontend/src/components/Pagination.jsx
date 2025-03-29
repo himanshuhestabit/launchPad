@@ -11,7 +11,7 @@ const Pagination = ({
   if (totalPages <= 1) return null;
 
   return (
-    <div className="flex justify-center items-center mt-6 space-x-2">
+    <div className="flex justify-center items-center mb-6 space-x-2">
       <button
         onClick={prevPage}
         disabled={currentPage === 1}

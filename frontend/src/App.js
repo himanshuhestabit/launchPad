@@ -10,11 +10,12 @@ import NavBar from "./components/NavBar";
 import Home from "./Pages/Home";
 import YourBlogs from "./Pages/YourBlogs";
 import CreateCategory from "./components/CreateCategory";
+import FooterNavbar from "./components/FooterNavbar";
+import { useSelector } from "react-redux";
 
 const App = () => {
-  const user = JSON.parse(localStorage.getItem("isAuthenticated"));
-  console.log(user);
-
+  const isAuthenticated =
+    useSelector((state) => state.auth.isAuthenticated) || false;
   return (
     <div>
       <BrowserRouter>
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/createBlog" element={<CreateBlog />} />
           <Route path="/readBlog" element={<ReadBlog />} />
         </Routes>
+        {isAuthenticated && <FooterNavbar />}
         <Footer />
       </BrowserRouter>
     </div>
