@@ -163,7 +163,7 @@ const Login = () => {
               </div>
             </form>
 
-            <div className="pt-6">
+            <div className="pt-6 flex items-center justify-between">
               <p className="text-lg">
                 New User? Please{" "}
                 <Link
@@ -171,6 +171,14 @@ const Login = () => {
                   className="font-bold bg-gradient-to-r from-[#007FFF] to-[#6CB4EE] text-transparent bg-clip-text hover:text-blue-600"
                 >
                   Register
+                </Link>
+              </p>
+              <p className="text-lg text-right">
+                <Link
+                  to="/forgotPassword"
+                  className="font-bold bg-gradient-to-r from-[#007FFF] to-[#6CB4EE] text-transparent bg-clip-text hover:text-blue-600"
+                >
+                  Forgot Password?
                 </Link>
               </p>
             </div>

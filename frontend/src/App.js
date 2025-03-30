@@ -13,6 +13,8 @@ import CreateCategory from "./components/CreateCategory";
 import FooterNavbar from "./components/FooterNavbar";
 import { useSelector } from "react-redux";
 import VerifyOTP from "./components/VerifyOTP";
+import ForgotPassword from "./components/ForgotPassword";
+import ResetPassword from "./components/ResetPassword";
 
 const App = () => {
   const isAuthenticated =
@@ -25,6 +27,8 @@ const App = () => {
           <Route path="/" element={<Authentication />} />
           <Route path="/home" element={<Home />} />
           <Route path="/verifyOtp" element={<VerifyOTP />} />
+          <Route path="/forgotPassword" element={<ForgotPassword />} />
+          <Route path="/resetPassword/:token" element={<ResetPassword />} />
           <Route path="/createCategory" element={<CreateCategory />} />
           <Route path="/yourBlog" element={<YourBlogs />} />
           <Route path="/login" element={<Login />} />
