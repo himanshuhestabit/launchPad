@@ -154,7 +154,7 @@ const UpdateBlog = ({ id, setShowUpdateBlog }) => {
                 <label>Select Category</label>
                 <select
                   {...register("category")}
-                  className="p-3  border rounded-md w-full"
+                  className="p-3 text-black border rounded-md w-full"
                 >
                   <option value="">Select Category</option>
                   {categories.map((cat) => (

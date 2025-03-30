@@ -76,7 +76,9 @@ export const getAllBlogs = async (req, res) => {
 export const getBlog = async (req, res) => {
   try {
     const blogId = req.params.id;
-    const blog = await Blog.findById(blogId).populate("user");
+    const blog = await Blog.findById(blogId)
+      .populate("user")
+      .populate("categoryId");
     if (!blog) {
       return res
         .status(404)
@@ -167,7 +169,10 @@ export const deleteBlog = async (req, res) => {
 
 export const getRecentBlogs = async (req, res) => {
   try {
-    const recentBlog = await Blog.find({}).sort({ createdAt: -1 }).limit(3);
+    const recentBlog = await Blog.find({})
+      .sort({ createdAt: -1 })
+      .limit(3)
+      .populate("categoryId");
     return res
       .status(200)
       .json({ success: true, message: "Blog Found Successfully", recentBlog });

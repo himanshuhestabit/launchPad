@@ -98,3 +98,29 @@ export const getBlogsByCategory = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const getCategoryName = async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+    if (!categoryId) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Category Id is required" });
+    }
+    const categoryExists = await Category.findById(categoryId);
+    if (!categoryExists) {
+      return res
+        .status(404)
+        .json({ success: false, message: "category doesnt exisits" });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "category found successfully",
+      categoryExists,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Error in getting category name" });
+  }
+};
