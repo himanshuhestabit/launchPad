@@ -2,27 +2,93 @@ import User from "../model/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Blog } from "../model/blog.model.js";
+import { generateOTP } from "../utils/generateOTP.js";
+import { sendEmail } from "../utils/sendEmail.js";
 
 export const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
+
     if (!name || !email || !password) {
       return res
         .status(400)
         .json({ success: false, message: "All fields are required" });
     }
+
     const userExist = await User.findOne({ email });
     if (userExist) {
       return res
         .status(400)
         .json({ success: false, message: "User already exists! Please Login" });
     }
+
     const hashedPassword = await bcrypt.hash(password, 12);
-    const user = new User({ name, email, password: hashedPassword });
+    const otp = generateOTP();
+    const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // OTP expires in 10 minutes
+
+    const user = new User({
+      name,
+      email,
+      password: hashedPassword,
+      otp,
+      otpExpires,
+    });
     await user.save();
+
+    // Send OTP Email
+    await sendEmail(
+      email,
+      "OTP Verifcation Mail From Blogs",
+      `<p>Your OTP is: <h2>${otp}</h2>. It will expire in 10 minutes.</p>`,
+      "<p>Thankyou</p>"
+    );
+
     return res
-      .status(201)
-      .json({ success: true, message: "User created successfully" });
+      .status(200)
+      .json({ success: true, message: "OTP sent to email. Please verify." });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const verifyOTP = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User not found" });
+    }
+
+    if (user.isVerified) {
+      return res.status(400).json({
+        success: false,
+        message: "User already verified. Please login.",
+      });
+    }
+
+    if (!user.otp || user.otpExpires < new Date()) {
+      return res.status(400).json({
+        success: false,
+        message: "OTP expired. Please register again.",
+      });
+    }
+
+    if (user.otp !== otp) {
+      return res.status(400).json({ success: false, message: "Invalid OTP" });
+    }
+
+    user.isVerified = true;
+    user.otp = undefined;
+    user.otpExpires = undefined;
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Email verified successfully. You can now login.",
+    });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }

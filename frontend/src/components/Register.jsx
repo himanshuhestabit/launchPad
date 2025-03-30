@@ -30,23 +30,21 @@ const Register = () => {
 
   async function onSubmit(data) {
     try {
-      if (data?.password === data?.confirmPassword) {
-        const response = await axios.post(
-          `${API_URL}/api/v1/user/register`,
-          data,
-          {
-            withCredentials: true,
-          }
-        );
+      if (data.password !== data.confirmPassword) {
+        toast.error("Passwords do not match");
+        return;
+      }
 
-        if (response.status === 201) {
-          toast.success(response?.data?.message);
-          navigate("/login");
-        } else {
-          throw new Error("User data missing in response");
-        }
-      } else {
-        toast.error("Password and Confirm Password is not matching");
+      const response = await axios.post(
+        `${API_URL}/api/v1/user/register`,
+        data
+      );
+      if (response.status === 200) {
+        toast.success("OTP sent to your email. Please verify.");
+
+        // Store email for verification
+        localStorage.setItem("otpEmail", data.email);
+        navigate("/verifyOtp");
       }
     } catch (error) {
       toast.error(error.response?.data?.message);

@@ -6,10 +6,12 @@ import {
   getUser,
   getUserBlogs,
   getUserProfile,
+  verifyOTP,
 } from "../controllers/user.controller.js";
 import { auth } from "../middleware/auth.middleware.js";
 const userRouter = express.Router();
 userRouter.post("/register", register);
+userRouter.post("/verifyOtp", verifyOTP);
 userRouter.post("/login", login);
 userRouter.get("/logout", logout);
 userRouter.get("/getUserBlogs/:userId", auth, getUserBlogs);
