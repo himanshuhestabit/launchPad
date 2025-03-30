@@ -208,3 +208,27 @@ export const searchBlog = async (req, res) => {
       .json({ succes: false, message: "Error in finding blogs" });
   }
 };
+
+export const getBlogsByCategory = async (req, res) => {
+  try {
+    const { categoryName } = req.params;
+
+    // Find the category by name
+    const category = await Category.findOne({ name: categoryName });
+
+    if (!category) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+
+    // Fetch blogs belonging to the found category
+    const blogs = await Blog.find({ categoryId: category._id })
+      .populate("user", "name") // Get user name only
+      .populate("categoryId", "name") // Get category name
+      .sort({ createdAt: -1 }); // Sort by latest blogs
+
+    res.status(200).json({ success: true, blogs });
+  } catch (error) {
+    console.error("Error fetching blogs by category:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
