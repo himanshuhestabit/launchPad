@@ -7,6 +7,7 @@ const RecentBlog = () => {
   const { recentBlogs } = useGetRecentBlogs();
 
   function handleVisit(id) {
+    window.scrollTo(0, 0);
     navigate("/readBlog", { state: { id } });
   }
 

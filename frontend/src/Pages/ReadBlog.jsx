@@ -19,6 +19,7 @@ const ReadBlog = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        window.scrollTo(0, 0);
         const response = await axios.get(`${API_URL}/api/v1/user/me`, {
           withCredentials: true,
         });
@@ -114,7 +115,7 @@ const ReadBlog = () => {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
-              className="absolute top-24 lg:left-72 left-0 bg-gradient-to-r from-[#FF5F6D] to-[#FFC371] text-white text-sm font-bold px-4 py-1 rounded-full shadow-md"
+              className="absolute top-24 lg:left-72 left-0 bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white text-sm font-bold px-4 py-1 rounded-full shadow-md"
             >
               {blogDetails?.categoryId?.name}
             </motion.span>

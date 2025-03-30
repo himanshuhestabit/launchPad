@@ -78,7 +78,10 @@ const AllBlogs = () => {
             className="flex items-center justify-center mt-8"
           >
             <button
-              onClick={() => navigate("/blog")}
+              onClick={() => {
+                navigate("/blog");
+                window.scrollTo(0, 0);
+              }}
               className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white px-6 py-2 rounded-lg transition-all duration-300 hover:brightness-90 cursor-pointer flex items-center justify-center gap-2"
             >
               Read All Blogs <BsFillCollectionFill />
