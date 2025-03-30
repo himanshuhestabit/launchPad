@@ -90,33 +90,60 @@ export const getBlog = async (req, res) => {
 
 export const updateBlog = async (req, res) => {
   try {
-    const { title, content, author } = req.body;
+    const { title, content, categoryId } = req.body;
     const blogId = req.params.id;
-    if (!title || !content || !author) {
-      return res
-        .status(400)
-        .json({ success: false, message: "All fields are required" });
+    const image = req.file ? req.file.path : null;
+
+    // Validate required fields
+    if (!title || !content || !categoryId) {
+      return res.status(400).json({
+        success: false,
+        message: "Title, content, and category are required",
+      });
     }
-    if (!blogId) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Blog ID is required" });
-    }
+
+    // Find the blog
     const blog = await Blog.findById(blogId);
     if (!blog) {
       return res
         .status(404)
         .json({ success: false, message: "Blog not found" });
     }
+
+    // Validate category
+    const category = await Category.findById(categoryId);
+    if (!category) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Invalid category" });
+    }
+
+    // If a new image is uploaded, update it
+    if (image) {
+      blog.image = image;
+    }
+
+    // Update blog details
     blog.title = title;
     blog.content = content;
-    blog.author = author;
+    blog.categoryId = categoryId;
+
+    // Save changes
     await blog.save();
-    return res
-      .status(200)
-      .json({ success: true, message: "Blog updated successfully" });
+
+    // Populate user and category for better frontend usage
+    const updatedBlog = await Blog.findById(blog._id)
+      .populate("user", "name email")
+      .populate("categoryId", "name");
+
+    res.status(200).json({
+      success: true,
+      message: "Blog updated successfully",
+      blog: updatedBlog,
+    });
   } catch (error) {
-    return res.status(500).json({ succes: false, message: error.message });
+    console.error("Error updating blog:", error);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 

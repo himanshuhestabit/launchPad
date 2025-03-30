@@ -18,13 +18,22 @@ import htmlToDraft from "html-to-draftjs";
 
 const UpdateBlog = ({ id, setShowUpdateBlog }) => {
   const API_URL = process.env.REACT_APP_API_URL;
+  const [stage, setStage] = useState(1);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [image, setImage] = useState(null);
+  const [categories, setCategories] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isMountedRef = useRef(true);
 
   const { register, handleSubmit, setValue, reset } = useForm();
   const { blogDetails } = useGetBlogDetails({ id });
+
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/api/v1/category/getCategory`, { withCredentials: true })
+      .then((res) => setCategories(res.data))
+      .catch((err) => console.error("Error fetching categories", err));
+  }, [API_URL]);
 
   const updateEditorState = useCallback((content) => {
     if (!content) return;
@@ -42,6 +51,7 @@ const UpdateBlog = ({ id, setShowUpdateBlog }) => {
         title: blogDetails.title || "",
         author: blogDetails.author || "",
         content: blogDetails.content || "",
+        category: blogDetails.categoryId || "",
       });
       updateEditorState(blogDetails.content || "");
     }
@@ -74,16 +84,11 @@ const UpdateBlog = ({ id, setShowUpdateBlog }) => {
   const onSubmit = async (data) => {
     if (!isMountedRef.current) return;
     setIsSubmitting(true);
-    const updatedData = {
-      title: data.title || blogDetails.title,
-      content: data.content || blogDetails.content,
-      author: data.author || blogDetails.author,
-    };
-
     const formData = new FormData();
-    formData.append("title", updatedData.title);
-    formData.append("content", updatedData.content);
-    formData.append("author", updatedData.author);
+    formData.append("title", data.title);
+    formData.append("content", data.content);
+    formData.append("author", data.author);
+    formData.append("categoryId", data.category);
     if (image) formData.append("image", image);
 
     try {
@@ -104,8 +109,8 @@ const UpdateBlog = ({ id, setShowUpdateBlog }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm">
-      <div className="bg-[#262626] text-white w-[90%] max-w-lg p-6 rounded-lg shadow-lg overflow-hidden">
-        <h2 className="text-2xl font-bold mb-4 text-center">
+      <div className="bg-white text-black w-[90%] min-h-[70%] p-6 rounded-lg shadow-lg overflow-hidden">
+        <h2 className="text-2xl font-bold mb-4 text-center bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text">
           Update Your Blog
         </h2>
         <div className="max-h-[80vh] overflow-y-auto pr-2">
@@ -113,63 +118,85 @@ const UpdateBlog = ({ id, setShowUpdateBlog }) => {
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-4"
           >
-            <div className="flex flex-col gap-2">
-              <label htmlFor="title">Blog Title</label>
-              <input
-                id="title"
-                {...register("title")}
-                className="bg-[#3B1C32] w-full p-3 rounded-md outline-none focus:ring-2 focus:ring-[#6A1E55]"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="content">Blog Content</label>
-              <div className="bg-[#3B1C32] w-full p-3 rounded-md border border-gray-500">
-                <Editor
-                  editorState={editorState}
-                  onEditorStateChange={handleEditorChange}
-                  wrapperClassName="editor-wrapper"
-                  editorClassName="editor-content max-h-60 overflow-auto"
-                  toolbarClassName="editor-toolbar"
+            {stage === 1 && (
+              <>
+                <label>Blog Title</label>
+                <input
+                  {...register("title")}
+                  className="p-3 border rounded-md w-full"
                 />
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="image">Upload Image</label>
-              {imagePreviewUrl && (
-                <img
-                  src={imagePreviewUrl}
-                  alt="Blog preview"
-                  className="w-full h-40 object-cover rounded-md mb-2"
+                <label>Blog Content</label>
+                <div className="overflow-y-auto max-h-[30vh]">
+                  <Editor
+                    editorState={editorState}
+                    onEditorStateChange={handleEditorChange}
+                    className="border p-3 rounded-md w-full"
+                  />
+                </div>
+              </>
+            )}
+            {stage === 2 && (
+              <>
+                <label>Upload Image</label>
+                {imagePreviewUrl && (
+                  <img
+                    src={imagePreviewUrl}
+                    alt="Blog preview"
+                    className="w-full h-40 object-cover rounded-md mb-2"
+                  />
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="p-3 border rounded-md w-full"
                 />
+                <label>Select Category</label>
+                <select
+                  {...register("category")}
+                  className="p-3  border rounded-md w-full"
+                >
+                  <option value="">Select Category</option>
+                  {categories.map((cat) => (
+                    <option key={cat._id} value={cat._id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </>
+            )}
+            <div className="flex justify-between mt-4 lg:flex-row flex-col gap-2 lg:gap-0">
+              {stage > 1 && (
+                <button
+                  type="button"
+                  onClick={() => setStage(stage - 1)}
+                  className="bg-gray-500 text-white px-6 py-2 rounded-md"
+                >
+                  Back
+                </button>
               )}
-              <input
-                id="image"
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="bg-[#3B1C32] w-full p-3 rounded-md border border-gray-500 cursor-pointer"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="author">Blog Author</label>
-              <input
-                id="author"
-                {...register("author")}
-                className="bg-[#3B1C32] w-full p-3 rounded-md outline-none focus:ring-2 focus:ring-[#6A1E55]"
-              />
-            </div>
-            <div className="flex justify-between mt-4">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="bg-green-600 text-white px-4 py-2 rounded-lg transition-all duration-300 hover:bg-green-700 disabled:opacity-50"
-              >
-                {isSubmitting ? "Updating..." : "Update"}
-              </button>
+              {stage < 2 && (
+                <button
+                  type="button"
+                  onClick={() => setStage(stage + 1)}
+                  className="bg-gray-500 text-white px-6 py-2 rounded-md"
+                >
+                  Next
+                </button>
+              )}
+              {stage === 2 && (
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="bg-gradient-to-r from-[#007FFF] to-[#6CB4EE] hover:from-[#1034A6] hover:to-[#00BFFF] text-white  px-4 py-2 rounded-md"
+                >
+                  {isSubmitting ? "Updating..." : "Update"}
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() => setShowUpdateBlog(false)}
-                className="bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300 hover:bg-red-700"
+                className="bg-gradient-to-r from-red-500 to-red-600 text-white hover:brightness-95 px-4 py-2 rounded-md"
               >
                 Cancel
               </button>
