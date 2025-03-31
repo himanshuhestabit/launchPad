@@ -66,13 +66,13 @@ const Register = () => {
           className="lg:w-2/4 h-full py-16 w-full"
         >
           <div>
-            <p className="text-4xl font-black pb-3">
+            <p className="text-4xl font-black pb-2">
               Welcome to{" "}
               <span className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text">
                 Blog App
               </span>
             </p>
-            <p className="text-2xl font-bold pb-4">Register To Get Started</p>
+            <p className="text-2xl font-bold pb-2">Register To Get Started</p>
             <p className="font-thin">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam
               ipsa voluptate nam culpa iure, aliquam ipsum aperiam labore hic
@@ -82,7 +82,7 @@ const Register = () => {
           <div className="pt-12">
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="w-full flex flex-col gap-6 py-6"
+              className="w-full flex flex-col gap-6 py-2"
             >
               <div className="flex flex-col gap-2 w-full">
                 <label className="text-lg font-semibold flex items-center gap-1">
