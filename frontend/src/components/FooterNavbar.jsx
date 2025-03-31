@@ -7,7 +7,10 @@ const FooterNavbar = () => {
       <div className="lg:max-w-[1300px] md:max-w-[800px] max-w-[300px] mx-auto flex items-start justify-between lg:flex-row flex-col lg:gap-0 gap-2">
         {/* Company Info */}
         <div className="lg:w-1/3 w-full">
-          <Link className="text-3xl font-black bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text">
+          <Link
+            to={"/home"}
+            className="text-3xl font-black bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-transparent bg-clip-text"
+          >
             Blogs
           </Link>
           <p className="mt-2 text-gray-400">

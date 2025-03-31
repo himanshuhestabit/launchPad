@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FaExternalLinkAlt } from "react-icons/fa";
+import { FaExternalLinkAlt, FaComment } from "react-icons/fa";
 
 const RecentlyAddedBlogs = () => {
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ const RecentlyAddedBlogs = () => {
     content = (
       <div className="flex items-center justify-between gap-4 lg:flex-row flex-col">
         {recentBlogs.map(
-          ({ _id, image, title, author, content, categoryId }) => {
+          ({ _id, image, title, author, content, categoryId, comments }) => {
             return (
               <div
                 key={_id}
@@ -67,16 +67,19 @@ const RecentlyAddedBlogs = () => {
                   </h3>
                   <p className="text-sm text-gray-500">By {author}</p>
                   <div
-                    className="text-gray-700 mt-2 line-clamp-2"
+                    className="text-gray-600 mt-2 line-clamp-2"
                     dangerouslySetInnerHTML={{ __html: content }}
                   />
-                  <div className="mt-auto">
+                  <div className=" flex items-center justify-between">
                     <button
                       onClick={() => handleVisit(_id)}
                       className=" mt-4 bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white px-4 py-2 rounded-lg hover:brightness-90 flex items-center justify-center gap-2"
                     >
                       Read More <FaExternalLinkAlt />
                     </button>
+                    <p className="flex items-center justify-center gap-2 text-gray-400">
+                      {comments.length} <FaComment />
+                    </p>
                   </div>
                 </div>
               </div>

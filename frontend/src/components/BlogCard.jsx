@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { FaExternalLinkAlt } from "react-icons/fa";
+import { FaExternalLinkAlt, FaComment, FaUser } from "react-icons/fa";
 import { GrDocumentUpdate } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
 
@@ -19,7 +19,6 @@ const BlogCard = ({ blog, onUpdate, onDelete, showActions = false }) => {
   }
 
   const categoryName = blog?.categoryId?.name;
-
   return (
     <motion.div
       variants={{
@@ -27,7 +26,7 @@ const BlogCard = ({ blog, onUpdate, onDelete, showActions = false }) => {
         visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
       }}
       whileHover={{ scale: 1.02 }}
-      className="flex lg:flex-row flex-col items-center bg-white rounded-lg p-6 shadow-md gap-6"
+      className="flex lg:flex-row flex-col items-start  bg-white rounded-lg p-6 shadow-md gap-10"
     >
       <motion.div
         className="relative lg:w-2/5 w-full"
@@ -50,13 +49,23 @@ const BlogCard = ({ blog, onUpdate, onDelete, showActions = false }) => {
       </motion.div>
 
       <div className="lg:w-3/5 w-full">
-        <h3 className="text-2xl font-bold text-gray-800">{blog.title}</h3>
+        <h3 className="text-2xl font-bold text-gray-800 pb-4">{blog.title}</h3>
         <div
           className="text-lg mb-4 text-gray-500"
           dangerouslySetInnerHTML={{
             __html: truncateHtml(blog?.content, 120),
           }}
         />
+        <div className="flex items-center justify-between text-gray-400">
+          <p className="flex items-center gap-2">
+            <FaUser />
+            {blog?.author}
+          </p>
+          <p className="flex items-center gap-2">
+            {blog?.comments?.length || 0}
+            <FaComment />
+          </p>
+        </div>
         <div className="mt-4 flex lg:flex-row flex-col gap-4">
           <button
             className="bg-gradient-to-r from-[#AF57C5] to-[#D33427] text-white hover:brightness-90 px-4 py-2 rounded-md transition-all duration-200 flex items-center justify-center gap-2"
