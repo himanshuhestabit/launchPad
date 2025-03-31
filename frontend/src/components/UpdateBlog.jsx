@@ -46,12 +46,13 @@ const UpdateBlog = ({ id, setShowUpdateBlog }) => {
 
   useEffect(() => {
     isMountedRef.current = true;
+    console.log(blogDetails);
     if (blogDetails) {
       reset({
         title: blogDetails.title || "",
         author: blogDetails.author || "",
         content: blogDetails.content || "",
-        category: blogDetails.categoryId || "",
+        category: blogDetails?.categoryId?._id,
       });
       updateEditorState(blogDetails.content || "");
     }
