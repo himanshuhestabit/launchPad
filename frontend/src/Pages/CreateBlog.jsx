@@ -93,7 +93,7 @@ const CreateBlog = () => {
         >
           {stage === 1 && (
             <>
-              <label>Enter Title</label>
+              <label htmlFor="title">Enter Title</label>
               <input
                 {...register("title", { required: "Title is required" })}
                 className="p-3 border rounded-md "
@@ -103,7 +103,7 @@ const CreateBlog = () => {
                 <span className="text-red-500">{errors.title.message}</span>
               )}
 
-              <label>Enter Content</label>
+              <label htmlFor="content">Enter Content</label>
               <div className="max-h-[70vh] overflow-y-auto">
                 <Editor
                   editorState={editorState}
@@ -119,7 +119,7 @@ const CreateBlog = () => {
 
           {stage === 2 && (
             <>
-              <label>Upload Image</label>
+              <label htmlFor="image">Upload Image</label>
               <input
                 type="file"
                 accept="image/*"
@@ -134,7 +134,7 @@ const CreateBlog = () => {
                 />
               )}
 
-              <label>Select Category</label>
+              <label htmlFor="category">Select Category</label>
               <select
                 {...register("category", { required: "Category is required" })}
                 className="p-3 border rounded-md"

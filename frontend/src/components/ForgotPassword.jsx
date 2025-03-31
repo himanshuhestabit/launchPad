@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { MdEmail, MdError } from "react-icons/md";
+import { MdEmail } from "react-icons/md";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";

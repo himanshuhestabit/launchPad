@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { GrDocumentUpdate } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
-import useGetCategoryName from "../hooks/useGetCategoryName";
 
 const BlogCard = ({ blog, onUpdate, onDelete, showActions = false }) => {
   const navigate = useNavigate();
@@ -18,10 +17,9 @@ const BlogCard = ({ blog, onUpdate, onDelete, showActions = false }) => {
   function handleRead(id) {
     navigate("/readBlog", { state: { id } });
   }
-  console.log("this sis blog from card", blog);
 
   const categoryName = blog?.categoryId?.name;
-  console.log(categoryName);
+
   return (
     <motion.div
       variants={{
@@ -94,8 +92,9 @@ BlogCard.propTypes = {
     title: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
-    category: PropTypes.shape({
-      name: PropTypes.string,
+    categoryId: PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
     }),
   }).isRequired,
   onUpdate: PropTypes.func,

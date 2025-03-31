@@ -121,12 +121,12 @@ const UpdateBlog = ({ id, setShowUpdateBlog }) => {
           >
             {stage === 1 && (
               <>
-                <label>Blog Title</label>
+                <label htmlFor="blog">Blog Title</label>
                 <input
                   {...register("title")}
                   className="p-3 border rounded-md w-full"
                 />
-                <label>Blog Content</label>
+                <label htmlFor="content">Blog Content</label>
                 <div className="overflow-y-auto max-h-[30vh]">
                   <Editor
                     editorState={editorState}
@@ -138,7 +138,7 @@ const UpdateBlog = ({ id, setShowUpdateBlog }) => {
             )}
             {stage === 2 && (
               <>
-                <label>Upload Image</label>
+                <label htmlFor="image">Upload Image</label>
                 {imagePreviewUrl && (
                   <img
                     src={imagePreviewUrl}
@@ -152,7 +152,7 @@ const UpdateBlog = ({ id, setShowUpdateBlog }) => {
                   onChange={handleImageChange}
                   className="p-3 border rounded-md w-full"
                 />
-                <label>Select Category</label>
+                <label htmlFor="category">Select Category</label>
                 <select
                   {...register("category")}
                   className="p-3 text-black border rounded-md w-full"

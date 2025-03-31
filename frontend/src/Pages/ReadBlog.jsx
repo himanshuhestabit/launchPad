@@ -85,7 +85,7 @@ const ReadBlog = () => {
       toast.error("Error deleting comment");
     }
   };
-  console.log(blogDetails);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 100 }}

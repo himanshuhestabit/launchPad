@@ -3,15 +3,12 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaExternalLinkAlt } from "react-icons/fa";
-import useGetCategoryName from "../hooks/useGetCategoryName";
 
 const RecentlyAddedBlogs = () => {
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL;
   const [recentBlogs, setRecentBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // Step 2: Get category names for all blogs
 
   const handleVisit = useCallback(
     (id) => {
@@ -37,8 +34,6 @@ const RecentlyAddedBlogs = () => {
   useEffect(() => {
     getRecentBlogs();
   }, [getRecentBlogs]);
-
-  console.log(recentBlogs);
 
   let content;
 
