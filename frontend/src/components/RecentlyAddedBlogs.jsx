@@ -77,7 +77,7 @@ const RecentlyAddedBlogs = () => {
                     >
                       Read More <FaExternalLinkAlt />
                     </button>
-                    <p className="flex items-center justify-center gap-2 text-gray-400">
+                    <p className="flex items-center justify-center gap-2 text-gray-300">
                       {comments.length} <FaComment />
                     </p>
                   </div>

@@ -109,6 +109,7 @@ const CreateBlog = () => {
                   editorState={editorState}
                   onEditorStateChange={handleEditorChange}
                   className="border p-3 rounded-md "
+                  placeholder="Enter Content Here"
                 />
               </div>
               {errors.content && (

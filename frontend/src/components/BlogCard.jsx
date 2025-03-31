@@ -56,7 +56,7 @@ const BlogCard = ({ blog, onUpdate, onDelete, showActions = false }) => {
             __html: truncateHtml(blog?.content, 120),
           }}
         />
-        <div className="flex items-center justify-between text-gray-400">
+        <div className="flex items-center justify-between text-gray-300">
           <p className="flex items-center gap-2">
             <FaUser />
             {blog?.author}
@@ -101,10 +101,16 @@ BlogCard.propTypes = {
     title: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
     categoryId: PropTypes.shape({
       _id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
     }),
+    comments: PropTypes.arrayOf(
+      PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+      })
+    ),
   }).isRequired,
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
