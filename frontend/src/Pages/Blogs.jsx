@@ -9,19 +9,19 @@ import { fetchBlogs } from "../redux/features/blogSlice";
 import Pagination from "../components/Pagination";
 import SearchBlog from "../components/SearchBlog";
 import { motion } from "framer-motion";
-import BlogCard from "../components/BlogCard"; // Import the BlogCard component
+import BlogCard from "../components/BlogCard";
 
 const Blogs = () => {
   const [showUpdateBlog, setShowUpdateBlog] = useState(false);
   const [selectedBlogId, setSelectedBlogId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState("All"); // Store selected category
   const blogsPerPage = 6;
 
   const user = useMemo(
     () => JSON.parse(localStorage.getItem("isAuthenticated")),
     []
   );
-  const API_URL = process.env.REACT_APP_API_URL;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { blogs, loading } = useGetBlogs();
@@ -39,8 +39,10 @@ const Blogs = () => {
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(
-        `${API_URL}/api/v1/blogs/deleteBlog/${id}`,
-        { withCredentials: true }
+        `${process.env.REACT_APP_API_URL}/api/v1/blogs/deleteBlog/${id}`,
+        {
+          withCredentials: true,
+        }
       );
       if (response.status === 200) {
         toast.success("Blog deleted successfully");
@@ -53,23 +55,30 @@ const Blogs = () => {
 
   const handleRead = (id) => navigate("/readBlog", { state: { id } });
 
+  // **Filter blogs based on selected category**
+  const filteredBlogs = useMemo(() => {
+    return selectedCategory === "All"
+      ? blogs
+      : blogs.filter((blog) => blog.categoryId.name === selectedCategory);
+  }, [blogs, selectedCategory]);
+
   const totalPages = useMemo(
-    () => Math.ceil(blogs.length / blogsPerPage),
-    [blogs.length]
+    () => Math.ceil(filteredBlogs.length / blogsPerPage),
+    [filteredBlogs.length]
   );
 
   const indexOfLastBlog = currentPage * blogsPerPage;
   const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
   const currentBlogs = useMemo(
-    () => blogs.slice(indexOfFirstBlog, indexOfLastBlog),
-    [blogs, indexOfFirstBlog, indexOfLastBlog]
+    () => filteredBlogs.slice(indexOfFirstBlog, indexOfLastBlog),
+    [filteredBlogs, indexOfFirstBlog, indexOfLastBlog]
   );
 
   let content;
 
   if (loading) {
     content = <p className="text-center text-xl">Loading blogs...</p>;
-  } else if (blogs.length === 0) {
+  } else if (filteredBlogs.length === 0) {
     content = <p className="text-center text-lg">No blogs available</p>;
   } else {
     content = (
@@ -86,7 +95,7 @@ const Blogs = () => {
             onRead={handleRead}
             onUpdate={handleUpdate}
             onDelete={handleDelete}
-            showActions={role === "admin"} // Show update & delete buttons only for admins
+            showActions={role === "admin"}
           />
         ))}
       </motion.div>
@@ -100,11 +109,12 @@ const Blogs = () => {
       transition={{ duration: 0.8, ease: "easeOut" }}
       className="w-full min-h-screen flex flex-col bg-white text-black gap-5"
     >
-      <SearchBlog />
+      {/* Pass setSelectedCategory to SearchBlog to update category */}
+      <SearchBlog setSelectedCategory={setSelectedCategory} />
       <div className="lg:max-w-[1300px] md:max-w-[800px] max-w-[300px] mx-auto p-6 min-h-[70vh] flex flex-col items-center justify-center">
         {content}
       </div>
-      {blogs.length > 0 && (
+      {filteredBlogs.length > 0 && (
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

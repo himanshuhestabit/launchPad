@@ -18,9 +18,9 @@ const BlogCard = ({ blog, onUpdate, onDelete, showActions = false }) => {
   function handleRead(id) {
     navigate("/readBlog", { state: { id } });
   }
+  console.log("this sis blog from card", blog);
 
-  const categoryId = blog?.categoryId;
-  const categoryName = useGetCategoryName(categoryId);
+  const categoryName = blog?.categoryId?.name;
   console.log(categoryName);
   return (
     <motion.div

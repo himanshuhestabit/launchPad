@@ -61,7 +61,7 @@ export const createBlog = async (req, res) => {
 
 export const getAllBlogs = async (req, res) => {
   try {
-    const blogs = await Blog.find();
+    const blogs = await Blog.find().populate("categoryId");
     if (!blogs) {
       return res
         .status(404)
