@@ -267,3 +267,34 @@ export const resetPassword = async (req, res) => {
     res.status(400).json({ message: "Invalid or expired token!" });
   }
 };
+
+export const updateUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { name, password } = req.body;
+    const userExists = await User.findById(userId);
+    if (!userExists) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User Not Found!" });
+    }
+
+    if (name) userExists.name = name;
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 12);
+      userExists.password = hashedPassword;
+    }
+    const updatedUser = await userExists.save();
+    return res.status(200).json({
+      success: true,
+      message: "User Profile Updated Successfully",
+      updatedUser,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Error in updating user profile",
+      error: error.message,
+    });
+  }
+};
