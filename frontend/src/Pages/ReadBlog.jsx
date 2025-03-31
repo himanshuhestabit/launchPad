@@ -8,7 +8,8 @@ import { motion } from "framer-motion";
 
 const ReadBlog = () => {
   const location = useLocation();
-  const blogId = location.state?.id;
+  const searchParams = new URLSearchParams(location.search);
+  const blogId = location.state?.id || searchParams.get("id");
   const { blogDetails } = useGetBlogDetails({ id: blogId });
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
